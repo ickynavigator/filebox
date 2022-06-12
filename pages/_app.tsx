@@ -7,7 +7,7 @@ import { getCookie, setCookies } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps, colorScheme: cScheme } = props;
@@ -25,7 +25,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   return (
     <>
       <Head>
-        <title>Mantine next example</title>
+        <title>File box</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
