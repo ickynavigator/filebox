@@ -32,6 +32,8 @@ module.exports = {
     ],
     'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
     'react/jsx-props-no-spreading': [0],
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
   overrides: [
     {
