@@ -1,8 +1,54 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from '@mantine/core';
+import { getCookie, setCookies } from 'cookies-next';
+import { GetServerSidePropsContext } from 'next';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import React, { useState } from 'react';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+  const { Component, pageProps, colorScheme: cScheme } = props;
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(cScheme);
+
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const nextColorScheme =
+      value || (colorScheme === 'dark' ? 'light' : 'dark');
+    setColorScheme(nextColorScheme);
+    setCookies('mantine-color-scheme', nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Mantine next example</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+        <link rel="shortcut icon" href="/favicon.svg" />
+      </Head>
+
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          theme={{ colorScheme }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <Component {...pageProps} />
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </>
+  );
 }
 
-export default MyApp
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
+});
