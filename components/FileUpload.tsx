@@ -1,4 +1,4 @@
-import { Notifications as message } from '@lib/notifications';
+import { Notifications as message } from '>lib/notifications';
 import { Group, MantineTheme, Text, useMantineTheme } from '@mantine/core';
 import { Dropzone, DropzoneStatus } from '@mantine/dropzone';
 import React from 'react';

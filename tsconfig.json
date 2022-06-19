@@ -16,9 +16,10 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@types/*": ["types/*"],
-      "@components/*": ["components/*"]
+      ">components/*": ["components/*"],
+      ">lib/*": ["lib/*"],
+      ">models/*": ["models/*"],
+      ">types/*": ["types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
