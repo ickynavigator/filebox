@@ -26,6 +26,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-underscore-dangle': 0,
+    'no-console': ['warn', { allow: ['error'] }],
     'import/extensions': [
       'error',
       'ignorePackages',
