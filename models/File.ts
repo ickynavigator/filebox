@@ -1,4 +1,4 @@
-import { IFile } from '>types/File';
+import type { FileModelType, IFile } from '>types/File';
 import mongoose from 'mongoose';
 
 /* FileSchema will correspond to a collection in your MongoDB database. */
@@ -24,8 +24,7 @@ const FileSchema = new mongoose.Schema<IFile>({
   },
 });
 
-const DocumentType = mongoose.model('File', FileSchema);
-const File: typeof DocumentType =
+const File: FileModelType =
   mongoose.models.File || mongoose.model('File', FileSchema);
 
 export default File;
