@@ -13,5 +13,3 @@ export interface IFileReturn {
   page?: number;
   pages?: number;
 }
-
-export default {};
