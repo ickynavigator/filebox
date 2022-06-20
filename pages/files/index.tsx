@@ -1,10 +1,26 @@
 import { Loader } from '>components';
-import { Alert, Center, Container } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Card,
+  Center,
+  Container,
+  Group,
+  Stack,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
+import { NextLink } from '@mantine/next';
 import { useFetchAllFiles } from 'hooks';
-import { AlertCircle } from 'tabler-icons-react';
+import { AlertCircle, Download } from 'tabler-icons-react';
 
 const Index = () => {
   const { data, error, loading } = useFetchAllFiles({});
+  const theme = useMantineTheme();
+
+  const secondaryColor =
+    theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7];
 
   if (loading) {
     return <Loader />;
@@ -26,9 +42,51 @@ const Index = () => {
 
   return (
     <Container className="h-100">
-      {files.map(file => (
-        <div key={file.id}>{file.name}</div>
-      ))}
+      {files.length > 0 ? (
+        <Stack>
+          {files.map(file => (
+            <Card shadow="sm" p="lg">
+              <Group
+                position="apart"
+                style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
+              >
+                <Title order={3} style={{ textDecoration: 'underline' }}>
+                  {file.name}
+                </Title>
+                <Button
+                  component={NextLink}
+                  variant="light"
+                  color="blue"
+                  style={{ marginTop: 14 }}
+                  download
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href={`api/download?filename=${file.url}`}
+                >
+                  <Download />
+                </Button>
+              </Group>
+
+              <Text
+                size="sm"
+                style={{ color: secondaryColor, lineHeight: 1.5 }}
+              >
+                {file.description || 'No description'}
+              </Text>
+            </Card>
+          ))}
+        </Stack>
+      ) : (
+        <Center py="md" className="h-100">
+          <Alert
+            icon={<AlertCircle size={16} />}
+            title="Bummer!"
+            color="yellow"
+          >
+            No files found.
+          </Alert>
+        </Center>
+      )}
     </Container>
   );
 };
