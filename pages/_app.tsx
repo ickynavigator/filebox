@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
+import '../styles/globals.css';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps, colorScheme: cScheme } = props;
