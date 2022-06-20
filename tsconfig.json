@@ -16,9 +16,13 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      ">components": ["components/index.ts"],
       ">components/*": ["components/*"],
+      ">lib": ["lib/index.ts"],
       ">lib/*": ["lib/*"],
+      ">models": ["models/index.ts"],
       ">models/*": ["models/*"],
+      ">types": ["types/index.ts"],
       ">types/*": ["types/*"]
     }
   },
