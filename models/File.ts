@@ -24,6 +24,8 @@ const FileSchema = new mongoose.Schema<IFile>({
   },
 });
 
-const File = mongoose.model('File', FileSchema);
+const DocumentType = mongoose.model('File', FileSchema);
+const File: typeof DocumentType =
+  mongoose.models.File || mongoose.model('File', FileSchema);
 
 export default File;
