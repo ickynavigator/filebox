@@ -1,5 +1,11 @@
 import { Notifications as message } from '>lib/notifications';
-import { Group, MantineTheme, Text, useMantineTheme } from '@mantine/core';
+import {
+  Group,
+  MantineTheme,
+  Space,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import { Dropzone, DropzoneStatus } from '@mantine/dropzone';
 import React from 'react';
 import { ErrorCode, FileRejection } from 'react-dropzone';
@@ -48,23 +54,39 @@ function ImageUploadIcon({
   return <Photo {...props} />;
 }
 
-function dropzoneChildren(status: DropzoneStatus, theme: MantineTheme) {
-  return (
-    <Group
-      position="center"
-      spacing="xl"
-      style={{ minHeight: 220, pointerEvents: 'none' }}
-    >
-      <ImageUploadIcon
-        status={status}
-        style={{ color: getIconColor(status, theme) }}
-        size={80}
-      />
+function dropzoneChildren(
+  status: DropzoneStatus,
+  theme: MantineTheme,
+  size?: number,
+  child?: React.ReactNode,
+) {
+  const bytesToMegaBytes = (bytes: number) => bytes / 1024 ** 2;
 
-      <Text size="sm" color="dimmed" inline mt={7}>
-        Attach as many files as you like, each file should not exceed 5mb
-      </Text>
-    </Group>
+  return (
+    <>
+      <Group
+        position="center"
+        spacing="xl"
+        style={{ minHeight: 220, pointerEvents: 'none' }}
+      >
+        <ImageUploadIcon
+          status={status}
+          style={{ color: getIconColor(status, theme) }}
+          size={80}
+        />
+        <Text size="sm" color="dimmed" inline mt={7}>
+          Attach files as you like
+          {size && `, files should not exceed ${bytesToMegaBytes(size)}mb`}
+        </Text>
+      </Group>
+
+      {child && (
+        <>
+          <Space h="md" />
+          <Group position="center">{child}</Group>
+        </>
+      )}
+    </>
   );
 }
 
@@ -92,14 +114,22 @@ export interface FileUploadProps {
   setFiles: (files: FileInterface[]) => void;
   onDrop?: (files: File[]) => void;
   onDropRejected?: (fileRejects: FileRejection[]) => void;
-  FILE_TYPE: string[];
-  MAX_FILE_SIZE: number;
+  FILE_TYPE?: string[];
+  MAX_FILE_SIZE?: number;
+  child?: React.ReactNode;
 }
 
 const Index: React.FC<FileUploadProps> = props => {
   const theme = useMantineTheme();
-  const { files, setFiles, MAX_FILE_SIZE, FILE_TYPE, onDrop, onDropRejected } =
-    props;
+  const {
+    files,
+    setFiles,
+    MAX_FILE_SIZE,
+    FILE_TYPE,
+    onDrop,
+    onDropRejected,
+    child,
+  } = props;
 
   /**
    * Handles file dropping
@@ -161,7 +191,7 @@ const Index: React.FC<FileUploadProps> = props => {
       maxSize={MAX_FILE_SIZE}
       accept={FILE_TYPE}
     >
-      {status => dropzoneChildren(status, theme)}
+      {status => dropzoneChildren(status, theme, MAX_FILE_SIZE, child)}
     </Dropzone>
   );
 };
