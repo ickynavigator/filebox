@@ -87,9 +87,9 @@ const Index = () => {
         url: process.env.NEXT_PUBLIC_BUCKET_URL + values.name,
       };
 
-      const mongoRes = await axios.post('/api/files', fileObj);
+      const mongoRes = await axios.post('/api/file', fileObj);
 
-      if (mongoRes.status !== 200) {
+      if (mongoRes.status !== 201) {
         throw new Error('Upload failed');
       }
 
