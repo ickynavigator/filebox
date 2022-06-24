@@ -69,7 +69,7 @@ export default async function handler(
         }
 
         if (result.files.length === 0) {
-          return res.status(404).json({ error: 'No files found' });
+          return res.status(200).json({ error: 'No files found' });
         }
 
         return res.status(200).json(result);

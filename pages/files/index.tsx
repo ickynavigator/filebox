@@ -58,7 +58,7 @@ const Index = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {files.length > 0 ? (
+      {files && files.length > 0 ? (
         <Stack>
           {files.map(file => (
             <Card shadow="sm" p="lg" key={String(file._id)}>
