@@ -15,7 +15,7 @@ export const NavigationBar = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <Header py={30} height={100}>
+    <Header height="10%">
       <Group sx={{ height: '100%' }} px={20} position="apart">
         <Group>
           <Anchor href="/">

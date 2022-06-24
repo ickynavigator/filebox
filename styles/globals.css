@@ -14,3 +14,11 @@ body {
 .h-100 {
   min-height: 100%;
 }
+
+.mantine-AppShell-root {
+  height: 100%;
+}
+
+.mantine-AppShell-body {
+  height: 90%;
+}
