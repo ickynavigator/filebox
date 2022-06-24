@@ -18,6 +18,7 @@ export default async function handler(
   request
     .get(filePath) // download original image
     .on('error', err => {
+      console.error(err);
       res.writeHead(404, { 'Content-Type': 'text/html' });
       res.write('<h1>404 not found</h1>');
       res.end();
