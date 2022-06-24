@@ -15,6 +15,7 @@ import {
 import { NextLink } from '@mantine/next';
 import axios from 'axios';
 import { useFetchAllFiles } from 'hooks';
+import Head from 'next/head';
 import { AlertCircle, Download, X } from 'tabler-icons-react';
 
 const Index = () => {
@@ -52,6 +53,11 @@ const Index = () => {
 
   return (
     <Container className="h-100">
+      <Head>
+        <title>List all files</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       {files.length > 0 ? (
         <Stack>
           {files.map(file => (

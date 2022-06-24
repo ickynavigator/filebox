@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import axios from 'axios';
+import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 
 const Index = () => {
@@ -107,6 +108,11 @@ const Index = () => {
 
   return (
     <Container>
+      <Head>
+        <title>Upload a file</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <FileUpload
         files={files}
         setFiles={setFiles}
