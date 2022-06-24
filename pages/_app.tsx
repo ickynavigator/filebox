@@ -1,3 +1,4 @@
+import { Layout } from '>components';
 import {
   ColorScheme,
   ColorSchemeProvider,
@@ -43,7 +44,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           withGlobalStyles
           withNormalizeCSS
         >
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
