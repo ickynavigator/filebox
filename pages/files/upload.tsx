@@ -20,6 +20,8 @@ const Index = () => {
   const [fileToUpload, setFileToUpload] = useState<File>();
   const [files, setFiles] = useState<FileInterface[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const form = useForm({
     initialValues: {
       name: '',
@@ -53,13 +55,16 @@ const Index = () => {
   ) => {
     event.preventDefault();
     event.stopPropagation();
+    setLoading(true);
 
     if (!fileToUpload) {
       Notifications.error('No file selected');
       return;
     }
 
-    Notifications.success('The site has been disabled till password protection is setup');
+    Notifications.success(
+      'The site has been disabled till password protection is setup',
+    );
     return;
 
     try {
@@ -107,6 +112,7 @@ const Index = () => {
 
       Notifications.error('Error uploading file');
     }
+    setLoading(false);
   };
 
   return (
@@ -147,7 +153,7 @@ const Index = () => {
               {...form.getInputProps('description')}
             />
 
-            <Button type="submit" my="md">
+            <Button type="submit" my="md" loading={loading}>
               Upload File
             </Button>
           </form>
