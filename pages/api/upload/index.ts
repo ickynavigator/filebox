@@ -8,7 +8,10 @@ const s3 = new S3({
   signatureVersion: 'v4',
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   switch (req.method) {
     case 'POST': {
       try {
@@ -36,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
   }
-};
+}
 
 export const config = {
   api: {
