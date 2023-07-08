@@ -65,7 +65,6 @@ const Index = () => {
     Notifications.success(
       'The site has been disabled till password protection is setup',
     );
-    return;
 
     try {
       const res = await axios.post('/api/upload', {
