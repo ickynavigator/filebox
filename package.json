@@ -11,6 +11,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "^11.11.0",
     "@mantine/core": "^6.0.16",
     "@mantine/dropzone": "^6.0.16",
     "@mantine/form": "^6.0.16",
