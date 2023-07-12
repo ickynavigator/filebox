@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { FileUpload } from '>components';
 import { Notifications } from '>lib/notifications';
-import { IFile } from '>types/File';
 import {
   Button,
   Container,
@@ -11,6 +10,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IFile } from '@prisma/client';
 import axios from 'axios';
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
@@ -96,7 +96,7 @@ const Index = () => {
         throw new Error('Upload failed');
       }
 
-      const fileObj: IFile = {
+      const fileObj: BetterOmit<IFile, 'id'> = {
         name: enhancedName,
         description: values.description,
         url: `${process.env.NEXT_PUBLIC_BUCKET_URL}${enhancedName}`,

@@ -1,30 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
-import { HydratedDocument, Model, Schema } from 'mongoose';
-
-export interface IFile {
-  name: string;
-  description?: string;
-  url: string;
-}
-
-export type HydratedFile = HydratedDocument<IFile>;
-
-export type FileSchemaType = Schema<
-  IFile,
-  Model<IFile, any, any, any, any>,
-  {},
-  {},
-  any,
-  {},
-  'type',
-  IFile
->;
-
-export type FileModelType = Model<IFile, {}, {}, {}, FileSchemaType>;
+import { IFile } from '@prisma/client';
 
 export interface IFileReturn {
-  files: HydratedFile[];
+  files: IFile[];
   page?: number;
   pages?: number;
 }
+
+export const isIFile = (value: unknown): value is IFile => {
+  const file = value as IFile;
+
+  return (
+    typeof file.name === 'string' &&
+    typeof file.description === 'string' &&
+    typeof file.url === 'string' &&
+    typeof file.size === 'number'
+  );
+};

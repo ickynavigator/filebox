@@ -1,8 +1,8 @@
-import type { HydratedFile } from '>types/File';
+import { IFile } from '@prisma/client';
 import axios from 'axios';
 import useSWRImmutable, { Fetcher } from 'swr';
 
-const fetcher: Fetcher<HydratedFile> = (url: string) =>
+const fetcher: Fetcher<IFile> = (url: string) =>
   axios.get(url).then(res => res.data);
 
 interface Props {
