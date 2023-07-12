@@ -103,14 +103,15 @@ export default async function handler(
         const page = Number(req.query.pageNumber) || 1;
         const noPaginate = !(Boolean(req.query.noPaginate) ?? true);
         const param = String(req.query.param) || '';
-        const regOpt = 'gim';
 
-        let keyword = [{}];
+        type KeyWord = { [k: string]: { contains: string } };
+        const keyword: { OR?: KeyWord[] } = {};
 
         if (req.query.keyword) {
-          const kwSearch = { $regex: req.query.keyword, $options: regOpt };
+          const kwSearch = { contains: req.query.keyword };
 
-          keyword = [
+          keyword.OR = [
+            { id: kwSearch },
             { name: kwSearch },
             { description: kwSearch },
             { url: kwSearch },
@@ -120,7 +121,7 @@ export default async function handler(
 
           if (param) {
             specificQuery[param] = kwSearch;
-            keyword.push({ ...specificQuery });
+            keyword.OR.push({ ...specificQuery });
           }
         }
 
@@ -128,16 +129,16 @@ export default async function handler(
 
         if (noPaginate) {
           result.files = await prisma.iFile.findMany({
-            where: {
-              OR: keyword,
-            },
             take: pageSize,
             skip: pageSize * (page - 1),
+            where: {
+              ...keyword,
+            },
           });
 
           const count = await prisma.iFile.count({
             where: {
-              OR: keyword,
+              ...keyword,
             },
           });
 
