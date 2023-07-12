@@ -10,7 +10,7 @@ interface Props {
 }
 const useFetchAllFiles = ({ search }: Props) => {
   const { data, error } = useSWRImmutable(
-    `/api/file?keyword=${search}`,
+    `/api/file${search ? `keyword=${search}` : ''}`,
     fetcher,
   );
 
