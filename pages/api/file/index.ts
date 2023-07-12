@@ -10,11 +10,11 @@ interface Queries {
   };
   GET: {
     query: {
-      pageSize: string;
-      pageNumber: string;
-      noPaginate: string;
-      param: string;
-      keyword: string;
+      pageSize?: string;
+      pageNumber?: string;
+      noPaginate?: string;
+      param?: string;
+      keyword?: string;
     };
     body: Record<string, never>;
   };
@@ -54,13 +54,8 @@ const isParam = <M extends keyof Queries>(
       return true;
     }
     case 'GET': {
-      return (
-        'pageSize' in query &&
-        'pageNumber' in query &&
-        'noPaginate' in query &&
-        'param' in query &&
-        'keyword' in query
-      );
+      // add exhaustive type checking
+      return true;
     }
     default: {
       return false;
