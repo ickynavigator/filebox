@@ -7,7 +7,7 @@ import {
   Header,
   useMantineColorScheme,
 } from '@mantine/core';
-import { NextLink } from '@mantine/next';
+import Link from 'next/link';
 import React from 'react';
 import { Box, MoonStars, Sun } from 'tabler-icons-react';
 
@@ -22,7 +22,7 @@ export const NavigationBar = () => {
             <Box size={50} />
           </Anchor>
           <Anchor
-            component={NextLink}
+            component={Link}
             href="/files"
             size="xl"
             transform="capitalize"
@@ -31,7 +31,7 @@ export const NavigationBar = () => {
             List all files
           </Anchor>
           <Anchor
-            component={NextLink}
+            component={Link}
             href="/files/upload"
             size="xl"
             transform="capitalize"

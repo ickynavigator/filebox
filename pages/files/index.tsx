@@ -12,10 +12,10 @@ import {
   Tooltip,
   useMantineTheme,
 } from '@mantine/core';
-import { NextLink } from '@mantine/next';
 import axios from 'axios';
 import { useFetchAllFiles } from 'hooks';
 import Head from 'next/head';
+import Link from 'next/link';
 import { AlertCircle, Download, X } from 'tabler-icons-react';
 
 const Index = () => {
@@ -61,7 +61,7 @@ const Index = () => {
       {files && files.length > 0 ? (
         <Stack>
           {files.map(file => (
-            <Card shadow="sm" p="lg" key={String(file._id)}>
+            <Card shadow="sm" p="lg" key={file.id}>
               <Group
                 position="apart"
                 style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
@@ -73,7 +73,7 @@ const Index = () => {
                 <Group>
                   <Tooltip label="Download" withArrow>
                     <Button
-                      component={NextLink}
+                      component={Link}
                       variant="light"
                       color="blue"
                       style={{ marginTop: 14 }}
@@ -91,7 +91,7 @@ const Index = () => {
                       variant="light"
                       color="red"
                       style={{ marginTop: 14 }}
-                      onClick={() => deleteFileHandler(String(file._id))}
+                      onClick={() => deleteFileHandler(file.id)}
                     >
                       <X />
                     </Button>

@@ -1,7 +1,7 @@
 import { Button, Center, Container, Text, Title } from '@mantine/core';
-import { NextLink } from '@mantine/next';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { Box, File, HeartHandshake } from 'tabler-icons-react';
 
 const Home: NextPage = () => (
@@ -24,10 +24,10 @@ const Home: NextPage = () => (
       <Text align="center">A file uploading and downloading site</Text>
 
       <Center my="lg">
-        <Button component={NextLink} href="/files/upload" mx="md">
+        <Button component={Link} href="/files/upload" mx="md">
           Upload a new file
         </Button>
-        <Button component={NextLink} href="/files" mx="md">
+        <Button component={Link} href="/files" mx="md">
           View All Files
         </Button>
       </Center>
