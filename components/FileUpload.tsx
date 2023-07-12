@@ -1,6 +1,6 @@
 import { Notifications as message } from '>lib/notifications';
 import { Group, Space, Text, useMantineTheme } from '@mantine/core';
-import { Dropzone, FileRejection } from '@mantine/dropzone';
+import { Dropzone, DropzoneProps, FileRejection } from '@mantine/dropzone';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import React from 'react';
 import { ErrorCode } from 'react-dropzone';
@@ -24,52 +24,30 @@ export interface FileInterface {
   preview: string;
   name: string;
   type: string;
+  size: number;
 }
 
 export interface FileUploadProps {
-  files: FileInterface[];
-  setFiles: (files: FileInterface[]) => void;
-  onDrop?: (files: File[]) => void;
+  onDrop: (files: File[]) => void;
   onDropRejected?: (fileRejects: FileRejection[]) => void;
-  FILE_TYPE?: string[];
-  MAX_FILE_SIZE?: number;
+
   child?: React.ReactNode;
+  dropzoneProps?: Partial<DropzoneProps>;
 }
 
 const Index: React.FC<FileUploadProps> = props => {
   const theme = useMantineTheme();
-  const {
-    files,
-    setFiles,
-    MAX_FILE_SIZE,
-    FILE_TYPE,
-    onDrop,
-    onDropRejected,
-    child,
-  } = props;
+  const { onDrop, onDropRejected, child, dropzoneProps } = props;
 
   /**
    * Handles file dropping
    */
-  async function handleFileDrop(fileList: File[]) {
+  function handleFileDrop(fileList: File[]) {
     fileList.forEach(async curr => {
-      const res = await checkSetFile(curr);
-
-      if (res) {
-        const file = {
-          file: curr,
-          preview: URL.createObjectURL(curr),
-          name: `${curr.name}+-+${new Date().toDateString()}`,
-          type: curr.type,
-        };
-
-        setFiles([...files, file]);
-      }
+      await checkSetFile(curr);
     });
 
-    if (onDrop) {
-      onDrop(fileList);
-    }
+    onDrop(fileList);
   }
 
   /**
@@ -105,8 +83,7 @@ const Index: React.FC<FileUploadProps> = props => {
     <Dropzone
       onDrop={file => handleFileDrop(file)}
       onReject={file => handleFileUploadRejection(file)}
-      maxSize={MAX_FILE_SIZE}
-      accept={FILE_TYPE}
+      {...dropzoneProps}
     >
       <Group
         position="center"
@@ -136,9 +113,14 @@ const Index: React.FC<FileUploadProps> = props => {
         </Dropzone.Idle>
 
         <Text size="sm" color="dimmed" inline mt={7}>
-          Attach files as you like
-          {MAX_FILE_SIZE
-            ? `, files should not exceed ${bytesToMegaBytes(MAX_FILE_SIZE)}mb`
+          {dropzoneProps && dropzoneProps.multiple === true
+            ? 'Attach as many files as you like'
+            : 'Attach a single file'}
+
+          {dropzoneProps?.maxSize
+            ? `, files should not exceed ${bytesToMegaBytes(
+                dropzoneProps.maxSize,
+              )}mb`
             : null}
         </Text>
       </Group>
