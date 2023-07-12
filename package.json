@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate": "yarn prisma generate",
+    "postinstall": "yarn generate"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -19,6 +21,7 @@
     "@mantine/hooks": "^6.0.16",
     "@mantine/next": "^6.0.16",
     "@mantine/notifications": "^6.0.16",
+    "@prisma/client": "^4.16.2",
     "@tabler/icons-react": "^2.24.0",
     "aws-sdk": "^2.1413.0",
     "axios": "^1.4.0",
@@ -52,6 +55,7 @@
     "husky": ">=8.0.3",
     "lint-staged": ">=13.2.3",
     "prettier": "^3.0.0",
+    "prisma": "^4.16.2",
     "typescript": "5.1.6"
   }
 }
