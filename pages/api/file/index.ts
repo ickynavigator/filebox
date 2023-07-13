@@ -1,5 +1,5 @@
 import prisma from '>lib/prisma';
-import { IFileReturn, isIFile } from '>types/File';
+import { IFileReturn, isIFile } from '>types';
 import { IFile } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 

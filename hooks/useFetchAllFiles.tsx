@@ -1,4 +1,4 @@
-import { IFileReturn } from '>types/File';
+import { IFileReturn } from '>types';
 import axios from 'axios';
 import useSWRImmutable, { Fetcher } from 'swr';
 
