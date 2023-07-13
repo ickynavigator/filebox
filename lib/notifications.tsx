@@ -1,11 +1,11 @@
-import { NotificationProps, showNotification } from '@mantine/notifications';
+import { NotificationProps, notifications } from '@mantine/notifications';
 import { ReactNode } from 'react';
 import { Check, X } from 'tabler-icons-react';
 
 export const ICON_STROKE_WIDTH = 1;
 
 export const notificationBase = (props: NotificationProps) => {
-  showNotification({
+  notifications.show({
     ...props,
   });
 };

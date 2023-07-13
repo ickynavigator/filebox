@@ -4,6 +4,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { getCookie, setCookie } from 'cookies-next';
 import NextApp, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
@@ -45,6 +46,7 @@ export default function App(props: CompleteAppProps) {
           withGlobalStyles
           withNormalizeCSS
         >
+          <Notifications />
           <Layout>
             <Component {...pageProps} />
           </Layout>
