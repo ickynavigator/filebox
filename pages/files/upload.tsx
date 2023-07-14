@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { FileUpload } from '>components';
 import { Notifications } from '>lib/notifications';
 import {
@@ -9,7 +8,7 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { hasLength, useForm } from '@mantine/form';
 import { IFile } from '@prisma/client';
 import axios from 'axios';
 import Head from 'next/head';
@@ -30,16 +29,14 @@ const Index = () => {
     },
 
     validate: {
-      name: value =>
-        value.length > 0
-          ? value.length < 128
-            ? null
-            : 'Name cannot be more than 128 characters'
-          : 'Name is required',
-      description: value =>
-        value.length < 500
-          ? null
-          : 'Description cannot be more than 500 characters',
+      name: hasLength(
+        { min: 1, max: 128 },
+        'Name must be between 1-128 characters',
+      ),
+      description: hasLength(
+        { min: 1, max: 500 },
+        'Description cannot be more than 500 characters',
+      ),
     },
   });
 
