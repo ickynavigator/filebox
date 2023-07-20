@@ -88,7 +88,7 @@ export default async function handler(
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while saving' });
+          .json({ error: 'An error occurred while creating a file' });
       }
     }
     case 'GET': {
@@ -162,7 +162,7 @@ export default async function handler(
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while saving' });
+          .json({ error: 'An error occurred while fetching file(s)' });
       }
     }
     default: {
