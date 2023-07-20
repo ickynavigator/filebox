@@ -35,7 +35,7 @@ const isParam = <M extends keyof Queries>(
       return 'id' in param;
     }
     case 'DELETE': {
-      return 'id' in param && 'name' in param;
+      return 'id' in param;
     }
     default: {
       return false;
@@ -83,7 +83,7 @@ export default async function handler(
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while saving' });
+          .json({ error: 'An error occurred while updating the file' });
       }
     }
     case 'GET': {
@@ -145,7 +145,7 @@ export default async function handler(
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while deleting' });
+          .json({ error: 'An error occurred while deleting the file' });
       }
     }
     default: {
