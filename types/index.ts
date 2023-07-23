@@ -1,5 +1,10 @@
 import { IFile } from '@prisma/client';
 
+export enum Auth {
+  Authorized = 0,
+  Unauthorized = 1,
+}
+
 export interface IFileReturn {
   files: IFile[];
   page?: number;
