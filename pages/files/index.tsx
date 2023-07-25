@@ -12,6 +12,7 @@ import {
   Tooltip,
   useMantineTheme,
 } from '@mantine/core';
+import WithAuth from 'HOC/withAuth';
 import axios from 'axios';
 import { useFetchAllFiles } from 'hooks';
 import Head from 'next/head';
@@ -123,4 +124,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default WithAuth(Index);

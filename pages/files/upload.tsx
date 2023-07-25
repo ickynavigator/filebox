@@ -5,11 +5,12 @@ import {
   Container,
   Space,
   Text,
-  Textarea,
   TextInput,
+  Textarea,
 } from '@mantine/core';
 import { hasLength, useForm } from '@mantine/form';
 import { IFile } from '@prisma/client';
+import WithAuth from 'HOC/withAuth';
 import axios from 'axios';
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
@@ -167,4 +168,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default WithAuth(Index);
