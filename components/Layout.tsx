@@ -1,4 +1,6 @@
 /* eslint-disable arrow-body-style */
+import { keys } from '>lib/swr';
+import { Auth } from '>types';
 import {
   ActionIcon,
   Anchor,
@@ -7,12 +9,33 @@ import {
   Header,
   useMantineColorScheme,
 } from '@mantine/core';
+import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { Box, MoonStars, Sun } from 'tabler-icons-react';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+import { Box, Logout, MoonStars, Sun } from 'tabler-icons-react';
 
 export const NavigationBar = () => {
+  const router = useRouter();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { data } = useSWR(
+    keys.AUTH,
+    async () => (await axios.get<{ message: Auth }>(`/api/auth`)).data,
+    {
+      fallbackData: { message: Auth.Unauthorized },
+    },
+  );
+  const { trigger } = useSWRMutation(
+    keys.AUTH_MUTATE,
+    async () => (await axios.delete('/api/auth')).data,
+    {
+      onSuccess: () => {
+        router.push('/auth');
+      },
+    },
+  );
 
   return (
     <Header height="10%">
@@ -42,6 +65,11 @@ export const NavigationBar = () => {
         </Group>
 
         <Group>
+          {data.message !== Auth.Authorized && (
+            <ActionIcon variant="default" onClick={() => trigger()} size={30}>
+              <Logout size={16} />
+            </ActionIcon>
+          )}
           <ActionIcon
             variant="default"
             onClick={() => toggleColorScheme()}
