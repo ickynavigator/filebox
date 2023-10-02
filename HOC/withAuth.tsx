@@ -1,3 +1,4 @@
+import { Error as ErrorComponent, Loader } from '>components';
 import { AUTH_REFRESH_TIME } from '>lib/constants';
 import { keys } from '>lib/swr';
 import { Auth } from '>types';
@@ -20,12 +21,22 @@ function WithAuth<T extends BasicProp = BasicProp>(
     const res = useSWR(
       keys.AUTH,
       async () => {
-        const { data } = await axios.get<{ message: Auth }>('/api/auth/check');
-        return data;
+        try {
+          const response = await axios.get<{ message: Auth }>(
+            '/api/auth/check',
+          );
+
+          if (response.status !== 200) throw new Error('Unauthorized');
+
+          return response.data;
+        } catch (error) {
+          return { message: Auth.Unauthorized };
+        }
       },
       {
         refreshInterval: AUTH_REFRESH_TIME,
         refreshWhenHidden: true,
+        shouldRetryOnError: false,
       },
     );
 
@@ -37,6 +48,19 @@ function WithAuth<T extends BasicProp = BasicProp>(
         router.push(`/auth?next=${router.asPath}`);
       }
     }, [res.data, router]);
+
+    if (res.isLoading) {
+      return <Loader />;
+    }
+
+    if (res.error) {
+      return (
+        <ErrorComponent
+          message="An Error occured while trying to authenticate you"
+          retry={{ show: true }}
+        />
+      );
+    }
 
     return <WrappedComponent {...props} />;
   };
