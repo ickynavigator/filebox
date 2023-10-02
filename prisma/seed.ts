@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  if (!fs.existsSync('./files.json')) return;
+
   const { files: data } = await import('./files.json');
 
   const response = await prisma.iFile.createMany({ data });
