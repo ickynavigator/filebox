@@ -1,17 +1,19 @@
-import { PrismaClient } from '@prisma/client';
+import { IFile, PrismaClient } from '@prisma/client';
 import fs from 'fs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  if (!fs.existsSync('./files.json')) return;
+  const path = './files.json';
 
-  const { files: data } = await import('./files.json');
-
-  const response = await prisma.iFile.createMany({ data });
-
-  // eslint-disable-next-line no-console
-  console.log(response);
+  if (fs.existsSync(path)) {
+    const { files } = (await import(path)) as { files: IFile[] };
+    const response = await prisma.iFile.createMany({ data: files });
+    // eslint-disable-next-line no-console
+    console.log(response);
+  } else {
+    console.error('File not found');
+  }
 }
 
 main()
