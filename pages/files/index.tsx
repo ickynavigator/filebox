@@ -60,7 +60,7 @@ const Index = () => {
       </Head>
 
       {files && files.length > 0 ? (
-        <Stack>
+        <Stack mb="xl">
           {files.map(file => (
             <Card shadow="sm" p="lg" key={file.id}>
               <Group
