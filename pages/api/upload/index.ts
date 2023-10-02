@@ -3,8 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const s3 = new S3({
   region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
+  accessKeyId: process.env.AWS_PERSONAL_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_PERSONAL_SECRET_KEY,
   signatureVersion: 'v4',
 });
 
