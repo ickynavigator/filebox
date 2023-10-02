@@ -1,4 +1,5 @@
 import { AUTH_COOKIE } from '>lib/constants';
+import { compareHash, hashPassword } from '>lib/hash';
 import { Auth } from '>types';
 import { setCookie } from 'cookies-next';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -53,13 +54,21 @@ export default async function handler(
 
       const { password } = req.body;
 
-      if (password !== PASSWORD) {
+      if (!PASSWORD) {
+        return res.status(500).json({
+          error: 'Internal Server Error',
+        });
+      }
+
+      const compared = compareHash(password, hashPassword(PASSWORD));
+
+      if (!compared) {
         return res.status(401).json({
           message: Auth.Unauthorized,
         });
       }
 
-      setCookie(AUTH_COOKIE, true, {
+      setCookie(AUTH_COOKIE, hashPassword(password), {
         req,
         res,
         httpOnly: true,
@@ -80,7 +89,7 @@ export default async function handler(
         });
       }
 
-      setCookie(AUTH_COOKIE, false, {
+      setCookie(AUTH_COOKIE, '', {
         req,
         res,
         httpOnly: true,
