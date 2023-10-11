@@ -1,6 +1,6 @@
 import { NotificationProps, notifications } from '@mantine/notifications';
 import { ReactNode } from 'react';
-import { Check, X } from 'tabler-icons-react';
+import { Check, ExclamationMark } from 'tabler-icons-react';
 
 export const ICON_STROKE_WIDTH = 1;
 
@@ -24,7 +24,7 @@ export const Notifications = {
       ...options,
       message,
       color: 'red',
-      icon: <X strokeWidth={ICON_STROKE_WIDTH} color="red" />,
+      icon: <ExclamationMark strokeWidth={ICON_STROKE_WIDTH} color="black" />,
     });
   },
 };
