@@ -2,7 +2,7 @@ import { NotificationProps, notifications } from '@mantine/notifications';
 import { ReactNode } from 'react';
 import { Check, ExclamationMark } from 'tabler-icons-react';
 
-export const ICON_STROKE_WIDTH = 1;
+export const ICON_STROKE_WIDTH = 2;
 
 export const notificationBase = (props: NotificationProps) => {
   notifications.show({
