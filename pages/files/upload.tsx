@@ -64,10 +64,6 @@ const Index = () => {
       return;
     }
 
-    Notifications.success(
-      'The site has been disabled till password protection is setup',
-    );
-
     try {
       const enhancedName = `${values.name}${
         fileExtension ? `.${fileExtension}` : ''
