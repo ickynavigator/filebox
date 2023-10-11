@@ -35,7 +35,7 @@ const Index = () => {
         'Name must be between 1-128 characters',
       ),
       description: hasLength(
-        { min: 1, max: 500 },
+        { max: 500 },
         'Description cannot be more than 500 characters',
       ),
     },
