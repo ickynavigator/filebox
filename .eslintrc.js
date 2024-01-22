@@ -12,6 +12,7 @@ module.exports = {
     'next/core-web-vitals',
     'eslint-config-next',
     'airbnb',
+    'eslint-config-airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
@@ -27,11 +28,6 @@ module.exports = {
   rules: {
     'no-underscore-dangle': 0,
     'no-console': ['warn', { allow: ['error'] }],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' },
-    ],
     'react/function-component-definition': 'off',
     'react/require-default-props': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
@@ -39,8 +35,6 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'no-shadow': 'off',
-    '@typescript-eslint/no-shadow': 'warn',
   },
   overrides: [
     {
