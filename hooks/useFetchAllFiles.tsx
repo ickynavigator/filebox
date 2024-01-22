@@ -1,4 +1,4 @@
-import { IFileReturn } from '>types/File';
+import { IFileReturn } from '>types';
 import axios from 'axios';
 import useSWRImmutable, { Fetcher } from 'swr';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 const useFetchAllFiles = ({ search }: Props) => {
   const { data, error } = useSWRImmutable(
-    `/api/file?keyword=${search}`,
+    `/api/file${search ? `keyword=${search}` : ''}`,
     fetcher,
   );
 

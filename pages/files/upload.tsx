@@ -1,24 +1,27 @@
-/* eslint-disable no-nested-ternary */
 import { FileUpload } from '>components';
-import type { FileInterface } from '>components/FileUpload';
 import { Notifications } from '>lib/notifications';
-import { IFile } from '>types/File';
 import {
   Button,
   Container,
   Space,
   Text,
-  Textarea,
   TextInput,
+  Textarea,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { hasLength, useForm } from '@mantine/form';
+import { IFile } from '@prisma/client';
+import WithAuth from 'HOC/withAuth';
 import axios from 'axios';
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 
+const MAX_FILE_SIZE = 20 * 1024 ** 2;
+
 const Index = () => {
   const [fileToUpload, setFileToUpload] = useState<File>();
-  const [files, setFiles] = useState<FileInterface[]>([]);
+  const [fileExtension, setFileExtension] = useState<string>();
+
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -27,32 +30,34 @@ const Index = () => {
     },
 
     validate: {
-      name: value =>
-        value.length > 0
-          ? value.length < 60
-            ? null
-            : 'Name cannot be more than 60 characters'
-          : 'Name is required',
-      description: value =>
-        value.length < 500
-          ? null
-          : 'Description cannot be more than 500 characters',
+      name: hasLength(
+        { min: 1, max: 128 },
+        'Name must be between 1-128 characters',
+      ),
+      description: hasLength(
+        { max: 500 },
+        'Description cannot be more than 500 characters',
+      ),
     },
   });
 
-  type FormValues = typeof form.values;
-
   const onDrop = (fileList: File[]) => {
     setFileToUpload(fileList[0]);
-    form.setFieldValue('name', fileList[0].name);
+
+    const extension = fileList[0].name.split('.').pop();
+    const name = fileList[0].name.split('.').slice(0, -1).join('.');
+
+    form.setFieldValue('name', name);
+    setFileExtension(extension);
   };
 
   const submitHandler = async (
-    values: FormValues,
+    values: typeof form.values,
     event: FormEvent<Element>,
   ) => {
     event.preventDefault();
     event.stopPropagation();
+    setLoading(true);
 
     if (!fileToUpload) {
       Notifications.error('No file selected');
@@ -60,8 +65,11 @@ const Index = () => {
     }
 
     try {
+      const enhancedName = `${values.name}${
+        fileExtension ? `.${fileExtension}` : ''
+      }`;
       const res = await axios.post('/api/upload', {
-        name: values.name,
+        name: enhancedName,
         type: fileToUpload.type,
       });
 
@@ -82,10 +90,11 @@ const Index = () => {
         throw new Error('Upload failed');
       }
 
-      const fileObj: IFile = {
-        name: values.name,
+      const fileObj: BetterOmit<IFile, 'id'> = {
+        name: enhancedName,
         description: values.description,
-        url: process.env.NEXT_PUBLIC_BUCKET_URL + values.name,
+        url: `${process.env.NEXT_PUBLIC_BUCKET_URL}${enhancedName}`,
+        size: fileToUpload.size,
       };
 
       const mongoRes = await axios.post('/api/file', fileObj);
@@ -98,12 +107,12 @@ const Index = () => {
 
       form.reset();
       setFileToUpload(undefined);
-      setFiles([]);
     } catch (error) {
       console.error(error);
 
       Notifications.error('Error uploading file');
     }
+    setLoading(false);
   };
 
   return (
@@ -114,10 +123,11 @@ const Index = () => {
       </Head>
 
       <FileUpload
-        files={files}
-        setFiles={setFiles}
         onDrop={onDrop}
-        MAX_FILE_SIZE={20 * 1024 ** 2}
+        dropzoneProps={{
+          maxSize: MAX_FILE_SIZE,
+          multiple: false,
+        }}
         child={
           <Text size="sm" color="dimmed" inline>
             Only one file should be uploaded at a time
@@ -144,7 +154,7 @@ const Index = () => {
               {...form.getInputProps('description')}
             />
 
-            <Button type="submit" my="md">
+            <Button type="submit" my="md" loading={loading}>
               Upload File
             </Button>
           </form>
@@ -154,4 +164,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default WithAuth(Index);

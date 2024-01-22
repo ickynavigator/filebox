@@ -4,14 +4,16 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from '@mantine/core';
-import { getCookie, setCookies } from 'cookies-next';
-import { GetServerSidePropsContext } from 'next';
-import { AppProps } from 'next/app';
+import { Notifications } from '@mantine/notifications';
+import { getCookie, setCookie } from 'cookies-next';
+import NextApp, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 import '../styles/globals.css';
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+type CompleteAppProps = AppProps & { colorScheme: ColorScheme };
+
+export default function App(props: CompleteAppProps) {
   const { Component, pageProps, colorScheme: cScheme } = props;
   const [colorScheme, setColorScheme] = useState<ColorScheme>(cScheme);
 
@@ -19,7 +21,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     const nextColorScheme =
       value || (colorScheme === 'dark' ? 'light' : 'dark');
     setColorScheme(nextColorScheme);
-    setCookies('mantine-color-scheme', nextColorScheme, {
+    setCookie('mantine-color-scheme', nextColorScheme, {
       maxAge: 60 * 60 * 24 * 30,
     });
   };
@@ -44,6 +46,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           withGlobalStyles
           withNormalizeCSS
         >
+          <Notifications />
           <Layout>
             <Component {...pageProps} />
           </Layout>
@@ -53,6 +56,11 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   );
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
-});
+App.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+
+  return {
+    ...appProps,
+    colorScheme: getCookie('mantine-color-scheme', appContext.ctx) || 'dark',
+  };
+};

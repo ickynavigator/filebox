@@ -1,45 +1,117 @@
-import dbConnect from '>lib/mongodb';
-import File from '>models/File';
-import { IFile, IFileReturn } from '>types/File';
+import prisma from '>lib/prisma';
+import { IFileReturn, isIFile } from '>types';
+import { IFile } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
+
+interface Queries {
+  POST: {
+    query: Record<string, never>;
+    body: BetterOmit<IFile, 'id'>;
+  };
+  GET: {
+    query: {
+      pageSize?: string;
+      pageNumber?: string;
+      noPaginate?: string;
+      param?: string;
+      keyword?: string;
+    };
+    body: Record<string, never>;
+  };
+}
+
+const isBody = <M extends keyof Queries>(
+  body: unknown,
+  method: M,
+): body is Queries[M]['body'] => {
+  if (typeof body !== 'object' || body === null) {
+    return false;
+  }
+
+  switch (method) {
+    case 'POST': {
+      return isIFile(body);
+    }
+    case 'GET': {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+};
+
+const isParam = <M extends keyof Queries>(
+  query: unknown,
+  method: M,
+): query is Queries[M]['query'] => {
+  if (typeof query !== 'object' || query === null) {
+    return false;
+  }
+
+  switch (method) {
+    case 'POST': {
+      return true;
+    }
+    case 'GET': {
+      // add exhaustive type checking
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+};
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await dbConnect();
-
   switch (req.method) {
     case 'POST': {
       try {
+        if (!isBody(req.body, req.method)) {
+          return res.status(400).json({
+            error: 'Invalid Body',
+          });
+        }
+
         const file = req.body;
 
-        const newFile = new File<IFile>(file);
-        const savedFile = await newFile.save();
+        const newFile = await prisma.iFile.create({
+          data: file,
+        });
 
-        return res.status(201).json(savedFile);
+        return res.status(201).json(newFile);
       } catch (err: unknown) {
         console.error(err);
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while saving' });
+          .json({ error: 'An error occurred while creating a file' });
       }
     }
     case 'GET': {
       try {
+        if (!isParam(req.query, req.method)) {
+          return res.status(400).json({
+            error: 'Invalid Parameters',
+          });
+        }
+
         const pageSize = Number(req.query.pageSize) || 10;
         const page = Number(req.query.pageNumber) || 1;
         const noPaginate = !(Boolean(req.query.noPaginate) ?? true);
         const param = String(req.query.param) || '';
-        const regOpt = 'gim';
 
-        let keyword = [{}];
+        type KeyWord = { [k: string]: { contains: string } };
+        const keyword: { OR?: KeyWord[] } = {};
 
         if (req.query.keyword) {
-          const kwSearch = { $regex: req.query.keyword, $options: regOpt };
+          const kwSearch = { contains: req.query.keyword };
 
-          keyword = [
+          keyword.OR = [
+            { id: kwSearch },
             { name: kwSearch },
             { description: kwSearch },
             { url: kwSearch },
@@ -49,23 +121,35 @@ export default async function handler(
 
           if (param) {
             specificQuery[param] = kwSearch;
-            keyword.push({ ...specificQuery });
+            keyword.OR.push({ ...specificQuery });
           }
         }
 
         const result: IFileReturn = { files: [] };
 
         if (noPaginate) {
-          result.files = await File.find({ $or: keyword })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1));
+          result.files = await prisma.iFile.findMany({
+            take: pageSize,
+            skip: pageSize * (page - 1),
+            where: {
+              ...keyword,
+            },
+          });
 
-          const count = await File.countDocuments({ $or: keyword });
+          const count = await prisma.iFile.count({
+            where: {
+              ...keyword,
+            },
+          });
 
           result.page = page;
           result.pages = Math.ceil(count / pageSize);
         } else {
-          result.files = await File.find({ $or: keyword });
+          result.files = await prisma.iFile.findMany({
+            where: {
+              OR: keyword,
+            },
+          });
         }
 
         if (result.files.length === 0) {
@@ -78,7 +162,7 @@ export default async function handler(
 
         return res
           .status(500)
-          .json({ error: 'An error occurred while saving' });
+          .json({ error: 'An error occurred while fetching file(s)' });
       }
     }
     default: {
