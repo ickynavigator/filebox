@@ -10,7 +10,6 @@ async function Layout({ children }: LayoutProps) {
   const session = await auth();
 
   const requestUrl = headers().get('x-url');
-  console.log('req', requestUrl);
 
   if (!session) {
     redirect(`/auth/signin?next=${requestUrl}`);
