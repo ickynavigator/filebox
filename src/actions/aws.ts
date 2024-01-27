@@ -11,12 +11,12 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import axios from 'axios';
-import { createFile } from '~/actions/files';
+import * as fileActions from '~/actions/files';
 import { env as clientEnv } from '~/env/client.mjs';
 import { env as serverEnv } from '~/env/server.mjs';
-import { BaseFile } from '~/types';
+import { BaseFile, IFile } from '~/types';
 
-export const s3Client = new S3Client({
+const s3Client = new S3Client({
   region: serverEnv.AWS_REGION,
   credentials: {
     accessKeyId: serverEnv.AWS_PERSONAL_ACCESS_KEY,
@@ -88,8 +88,8 @@ export async function uploadMultiPartFile(file: File, divisions = 5) {
   }
 }
 
-export async function uploadPresignedFile(file: File) {
-  const clientUrl = await createPresignedUrl({ key: file.name });
+export async function uploadPresignedFile(file: File, key: IFile['id']) {
+  const clientUrl = await createPresignedUrl({ key });
 
   await axios.put(clientUrl, file, {
     headers: { 'Content-type': file.type, 'Access-Control-Allow-Origin': '*' },
@@ -101,27 +101,28 @@ export async function uploadFormData(values: FormData) {
   const description = values.get('description') as string;
   const fileToUpload = values.get('file') as File;
 
-  await uploadPresignedFile(fileToUpload);
-
   const fileObj: BaseFile = {
     name: name,
     description: description,
     url: `${clientEnv.NEXT_PUBLIC_BUCKET_URL}${name}`,
   };
 
-  await createFile(fileObj);
+  const createdFile = await fileActions.createFile(fileObj);
+
+  await uploadPresignedFile(fileToUpload, createdFile.id);
 }
 
-export async function deleteFile(Key: string) {
+export async function deleteFile(Key: IFile['id']) {
   const command = new DeleteObjectCommand({
     Bucket: serverEnv.AWS_BUCKET_NAME,
     Key,
   });
-  s3Client.send(command);
+  await s3Client.send(command);
+  await fileActions.deleteFile(Key);
 }
 
 interface PresignedURLClient {
-  key: string;
+  key: IFile['id'];
 }
 export async function createPresignedUrl({ key }: PresignedURLClient) {
   const command = new PutObjectCommand({
@@ -131,4 +132,6 @@ export async function createPresignedUrl({ key }: PresignedURLClient) {
   return getSignedUrl(s3Client, command, { expiresIn: 3600 });
 }
 
-export async function downloadPresignedFile(Key: string) {}
+export async function downloadPresignedFile(Key: IFile['id']) {
+  console.log(Key);
+}
