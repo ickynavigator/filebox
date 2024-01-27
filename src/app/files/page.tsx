@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Card,
   Center,
   Container,
@@ -8,12 +7,12 @@ import {
   Stack,
   Text,
   Title,
-  Tooltip,
 } from '@mantine/core';
 import { IconAlertCircle, IconDownload, IconX } from '@tabler/icons-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { deleteFile, getFiles } from '~/actions/files';
+import AsyncButton from '~/components/AsyncButton';
 
 export const metadata: Metadata = {
   title: 'List all files',
@@ -46,39 +45,29 @@ async function Page(props: PageProps) {
       <Stack>
         {files.map(file => (
           <Card shadow="sm" p="lg" key={file.id}>
-            <Group justify="space-between" mb={5} mt="sm">
-              <Title order={3} td="underline">
-                {file.name}
-              </Title>
+            <Group justify="space-between" mb={5}>
+              <Title order={3}>{file.name}</Title>
               <Group>
-                <Tooltip label="Download" withArrow>
-                  <Button
-                    component={Link}
-                    variant="light"
-                    color="blue"
-                    mt={14}
-                    download
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href={`api/download?filename=${file.url}`}
-                  >
-                    <IconDownload />
-                  </Button>
-                </Tooltip>
-                <Tooltip label="Delete file" withArrow color="red">
-                  <Button
-                    variant="light"
-                    color="red"
-                    mt={14}
-                    onClick={async () => {
-                      'use server';
-                      await deleteFile(file.id);
-                      window.location.reload();
-                    }}
-                  >
-                    <IconX />
-                  </Button>
-                </Tooltip>
+                <AsyncButton
+                  label="Download"
+                  Icon={<IconDownload />}
+                  buttonProps={{
+                    download: true,
+                    component: Link,
+                    rel: 'noopener noreferrer',
+                    target: '_blank',
+                    href: `api/download?filename=${file.id}`,
+                  }}
+                />
+                <AsyncButton
+                  color="red"
+                  label="Delete file"
+                  Icon={<IconX />}
+                  action={async () => {
+                    'use server';
+                    await deleteFile(file.id);
+                  }}
+                />
               </Group>
             </Group>
             <Text size="sm" lh={1.5} c="dimmed">
