@@ -16,7 +16,7 @@ function WithAuth<T extends BasicProp = BasicProp>(
     WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
     // TODO: work on the auth setup
-    if (1 = 1) {
+    if (1 === 1) {
       return WrappedComponent;
     }
 
