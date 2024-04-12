@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { env } from '~/env/server.mjs';
+import env from '~/env/index.mjs';
 
 export const {
   handlers: { GET, POST },

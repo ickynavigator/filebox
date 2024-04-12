@@ -12,15 +12,14 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import axios from 'axios';
 import * as fileActions from '~/actions/files';
-import { env as clientEnv } from '~/env/client.mjs';
-import { env as serverEnv } from '~/env/server.mjs';
+import env from '~/env/index.mjs';
 import { BaseFile, IFile } from '~/types';
 
 const s3Client = new S3Client({
-  region: serverEnv.AWS_REGION,
+  region: env.AWS_REGION,
   credentials: {
-    accessKeyId: serverEnv.AWS_PERSONAL_ACCESS_KEY,
-    secretAccessKey: serverEnv.AWS_PERSONAL_SECRET_KEY,
+    accessKeyId: env.AWS_PERSONAL_ACCESS_KEY,
+    secretAccessKey: env.AWS_PERSONAL_SECRET_KEY,
   },
 });
 
@@ -104,7 +103,7 @@ export async function uploadFormData(values: FormData) {
   const fileObj: BaseFile = {
     name: name,
     description: description,
-    url: `${clientEnv.NEXT_PUBLIC_BUCKET_URL}${name}`,
+    url: `${env.NEXT_PUBLIC_BUCKET_URL}${name}`,
   };
 
   const createdFile = await fileActions.createFile(fileObj);
@@ -114,7 +113,7 @@ export async function uploadFormData(values: FormData) {
 
 export async function deleteFile(Key: IFile['id']) {
   const command = new DeleteObjectCommand({
-    Bucket: serverEnv.AWS_BUCKET_NAME,
+    Bucket: env.AWS_BUCKET_NAME,
     Key,
   });
   await s3Client.send(command);
@@ -126,7 +125,7 @@ interface PresignedURLClient {
 }
 export async function createPresignedUrl({ key }: PresignedURLClient) {
   const command = new PutObjectCommand({
-    Bucket: serverEnv.AWS_BUCKET_NAME,
+    Bucket: env.AWS_BUCKET_NAME,
     Key: key,
   });
   return getSignedUrl(s3Client, command, { expiresIn: 3600 });
