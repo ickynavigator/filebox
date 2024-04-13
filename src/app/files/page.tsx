@@ -56,7 +56,7 @@ async function Page(props: PageProps) {
                     component: Link,
                     rel: 'noopener noreferrer',
                     target: '_blank',
-                    href: `api/download?filename=${file.id}`,
+                    href: `api/download/${encodeURIComponent(file.url)}${file.name ? `?filename=${encodeURIComponent(file.name)}` : ''}`,
                   }}
                 />
                 <AsyncButton
