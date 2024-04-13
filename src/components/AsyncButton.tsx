@@ -2,18 +2,20 @@
 
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { useState } from 'react';
+import { Notifications } from '~/lib/notifications';
 
 interface IAsyncButton {
   label: string;
   color?: string;
   action?: () => Promise<void>;
+  onSuccess?: () => void;
   Icon: React.ReactNode;
 
   buttonProps?: React.ComponentPropsWithoutRef<typeof ActionIcon>;
 }
 
 const AsyncButton = (props: IAsyncButton) => {
-  const { label, color, action, Icon, buttonProps } = props;
+  const { label, color, action, Icon, buttonProps, onSuccess } = props;
   const [loading, setLoading] = useState(false);
 
   return (
@@ -25,9 +27,14 @@ const AsyncButton = (props: IAsyncButton) => {
         onClick={
           action &&
           (async () => {
-            setLoading(true);
-            await action();
-            setLoading(false);
+            try {
+              setLoading(true);
+              await action();
+              setLoading(false);
+              onSuccess?.();
+            } catch (error) {
+              Notifications.error('An error occurred. Please try again.');
+            }
           })
         }
         {...buttonProps}
