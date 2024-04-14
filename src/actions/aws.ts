@@ -55,6 +55,7 @@ export async function uploadFormData(values: FormData) {
       'Access-Control-Allow-Origin': '*',
     },
     body: fileToUpload,
+    next: { tags: [TAGS.FILES] },
   });
 }
 
