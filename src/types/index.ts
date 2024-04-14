@@ -5,7 +5,7 @@ export enum Auth {
   Unauthorized = 1,
 }
 
-export type BaseFile = BetterOmit<IFile, 'id' | 'size'>;
+export type BaseFile = BetterOmit<IFile, 'id'>;
 
 export type { IFile };
 

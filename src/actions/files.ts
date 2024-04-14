@@ -58,8 +58,13 @@ export async function getFiles(options: GetFilesOptions) {
   return result;
 }
 
-export async function createFile(file: BaseFile) {
-  return await prisma.iFile.create({ data: file });
+export async function createFile(file: BaseFile, baseURL: string) {
+  const createdFile = await prisma.iFile.create({ data: file });
+
+  return prisma.iFile.update({
+    where: { id: createdFile.id },
+    data: { url: `${baseURL}${createdFile.id}` },
+  });
 }
 
 export async function getFile(id: IFile['id']) {
