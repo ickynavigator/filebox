@@ -1,5 +1,6 @@
 'use server';
 
+import { File as BufferFile } from 'buffer';
 import {
   DeleteObjectCommand,
   PutObjectCommand,
@@ -20,11 +21,13 @@ const s3Client = new S3Client({
   },
 });
 
+const fileSchema = z.instanceof(BufferFile, { message: 'Required' });
+
 export async function uploadFormData(values: FormData) {
   const formDataSchema = z.object({
     name: z.string(),
     description: z.string(),
-    fileToUpload: z.instanceof(File),
+    fileToUpload: fileSchema,
   });
 
   const { name, description, fileToUpload } = formDataSchema.parse({
@@ -55,7 +58,8 @@ export async function uploadFormData(values: FormData) {
       'Content-Type': fileToUpload.type,
       'Access-Control-Allow-Origin': '*',
     },
-    body: fileToUpload,
+    // this is safe..... trust me
+    body: fileToUpload as unknown as File,
     next: { tags: [TAGS.FILES] },
   });
 }
