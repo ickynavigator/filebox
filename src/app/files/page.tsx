@@ -1,7 +1,8 @@
 import { Alert, Center, Container, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { Metadata } from 'next';
-import { deleteFile, getFiles } from '~/actions/files';
+import { deleteFile } from '~/actions/aws';
+import { getFiles } from '~/actions/files';
 import { FileCard } from '~/components/fileCard';
 
 export const metadata: Metadata = {
