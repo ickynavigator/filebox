@@ -1,5 +1,7 @@
 import prisma from '~/lib/prisma';
 import { BaseFile, IFile, IFileReturn } from '~/types';
+import { unstable_cache as cache } from 'next/cache';
+import { TAGS } from '~/lib/constants';
 
 interface GetFilesOptions {
   pageSize?: number;
@@ -57,6 +59,10 @@ export async function getFiles(options: GetFilesOptions) {
 
   return result;
 }
+
+export const getFilesCached = cache(getFiles, ['FILE_LIST'], {
+  tags: [TAGS.FILES],
+});
 
 export async function createFile(file: BaseFile, baseURL: string) {
   const createdFile = await prisma.iFile.create({ data: file });

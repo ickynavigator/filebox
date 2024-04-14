@@ -2,7 +2,7 @@ import { Alert, Center, Container, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { Metadata } from 'next';
 import { deleteFile } from '~/actions/aws';
-import { getFiles } from '~/actions/files';
+import { getFilesCached } from '~/actions/files';
 import { FileCard } from '~/components/fileCard';
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ interface PageProps {
 
 async function Page(props: PageProps) {
   const { search } = props.searchParams;
-  const { files } = await getFiles({ keyword: search ?? null });
+  const { files } = await getFilesCached({ keyword: search ?? null });
 
   if (files.length <= 0) {
     return (
