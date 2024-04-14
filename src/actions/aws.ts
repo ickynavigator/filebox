@@ -46,6 +46,7 @@ export async function uploadFormData(values: FormData) {
   const presignedUrl = await createPresignedUrl({
     key: createdFile.id,
     type: fileToUpload.type,
+    name: fileToUpload.name,
   });
 
   await fetch(presignedUrl, {
@@ -71,12 +72,18 @@ export async function deleteFile(Key: IFile['id']) {
 interface PresignedURLClient {
   key: IFile['id'];
   type?: string;
+  name?: string;
 }
-export async function createPresignedUrl({ key, type }: PresignedURLClient) {
+export async function createPresignedUrl(opts: PresignedURLClient) {
+  const { key, type, name } = opts;
+
   const command = new PutObjectCommand({
     Bucket: env.AWS_BUCKET_NAME,
     Key: key,
     ContentType: type,
+    Metadata: {
+      'Content-Disposition': `inline; filename="${name}"`,
+    },
   });
   return getSignedUrl(s3Client, command, { expiresIn: 3600 });
 }
