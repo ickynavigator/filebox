@@ -12,10 +12,10 @@ import { useForm } from '@mantine/form';
 import { FormEvent, useState } from 'react';
 import { uploadFormData } from '~/actions/aws';
 import { FileUpload, type FileInterface } from '~/components/FileUpload';
+import { MAX_UPLOAD_FILE_SIZE } from '~/lib/constants';
 import { Notifications } from '~/lib/notifications';
 
 function Page() {
-  const [fileToUpload, setFileToUpload] = useState<File>();
   const [files, setFiles] = useState<FileInterface[]>([]);
 
   const form = useForm({
@@ -35,19 +35,18 @@ function Page() {
     },
   });
 
-  type FormValues = typeof form.values;
-
   const onDrop = (fileList: File[]) => {
-    setFileToUpload(fileList[0]);
-    form.setFieldValue('name', fileList[0].name);
+    form.setFieldValue('name', fileList[fileList.length - 1]?.name);
   };
 
   const submitHandler = async (
-    values: FormValues,
+    values: typeof form.values,
     event: FormEvent<HTMLFormElement> | undefined,
   ) => {
     event?.preventDefault();
     event?.stopPropagation();
+
+    const fileToUpload = files[0];
 
     if (!fileToUpload) {
       Notifications.error('No file selected');
@@ -56,14 +55,15 @@ function Page() {
 
     try {
       const formData = new FormData();
-      formData.append('file', fileToUpload);
+      formData.append('file', fileToUpload.file);
       formData.append('name', values.name);
       formData.append('description', values.description);
-      uploadFormData(formData);
+
+      await uploadFormData(formData);
 
       Notifications.success('File uploaded successfully');
+
       form.reset();
-      setFileToUpload(undefined);
       setFiles([]);
     } catch (error) {
       console.error(error);
@@ -78,7 +78,8 @@ function Page() {
         files={files}
         setFiles={setFiles}
         onDrop={onDrop}
-        MAX_FILE_SIZE={20 * 1024 ** 2}
+        MAX_FILE_SIZE={MAX_UPLOAD_FILE_SIZE}
+        singleFile
         children={
           <Text size="sm" c="dimmed" inline>
             Only one file should be uploaded at a time
@@ -86,7 +87,7 @@ function Page() {
         }
       />
 
-      {fileToUpload && (
+      {files[0] && (
         <>
           <Space h="md" />
           <form onSubmit={form.onSubmit(submitHandler)}>

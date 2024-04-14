@@ -34,6 +34,7 @@ export interface FileUploadProps {
   FILE_TYPE?: string[];
   MAX_FILE_SIZE?: number;
 
+  singleFile?: boolean;
   children?: React.ReactNode;
 }
 
@@ -45,6 +46,7 @@ export function FileUpload({
   onDrop,
   onDropRejected,
   children,
+  singleFile,
 }: FileUploadProps) {
   /** Handles file dropping */
   function handleFileDrop(fileList: File[]) {
@@ -59,7 +61,11 @@ export function FileUpload({
           type: curr.type,
         };
 
-        setFiles([...files, file]);
+        if (singleFile) {
+          setFiles([file]);
+        } else {
+          setFiles([...files, file]);
+        }
       }
     });
 
@@ -126,7 +132,7 @@ export function FileUpload({
           </Text>
           {MAX_FILE_SIZE && (
             <Text size="sm" c="dimmed" inline mt={7}>
-              {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE)}mb`}
+              {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE).toFixed(2)}mb`}
             </Text>
           )}
           {children ? children : null}
