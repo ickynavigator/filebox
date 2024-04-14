@@ -1,6 +1,15 @@
 'use client';
 
-import { Box, Card, Group, Stack, Text, Title } from '@mantine/core';
+import {
+  ActionIconGroup,
+  Box,
+  Card,
+  Group,
+  Stack,
+  Text,
+  Title,
+  rem,
+} from '@mantine/core';
 import React from 'react';
 import { IFile } from '~/types';
 import AsyncButton from './AsyncButton';
@@ -9,6 +18,7 @@ import Link from 'next/link';
 import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
+import ClipboardButton from './copyButton';
 
 interface Props {
   file: IFile;
@@ -24,10 +34,11 @@ export const FileCard = (props: Props) => {
       <Stack gap="xs">
         <Group justify="space-between" mb={5}>
           <Title order={3}>{file.name}</Title>
-          <Group>
+          <ActionIconGroup>
+            <ClipboardButton text={file.url} />
             <AsyncButton
               label="Download"
-              Icon={<IconDownload />}
+              Icon={<IconDownload style={{ width: rem(16) }} />}
               buttonProps={{
                 download: true,
                 component: Link,
@@ -40,7 +51,7 @@ export const FileCard = (props: Props) => {
             <AsyncButton
               color="red"
               label="Delete file"
-              Icon={<IconX />}
+              Icon={<IconX style={{ width: rem(16) }} />}
               onSuccess={() => {
                 Notifications.success('File deleted');
                 router.refresh();
@@ -49,7 +60,7 @@ export const FileCard = (props: Props) => {
                 await deleteHandler(file.id);
               }}
             />
-          </Group>
+          </ActionIconGroup>
         </Group>
 
         {file.size ? (

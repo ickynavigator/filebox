@@ -21,7 +21,7 @@ const AsyncButton = (props: IAsyncButton) => {
   return (
     <Tooltip label={label} withArrow color={color}>
       <ActionIcon
-        variant="light"
+        variant="outline"
         color={color}
         loading={loading}
         onClick={
