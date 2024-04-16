@@ -107,6 +107,7 @@ export function FileUpload({
       onReject={file => handleFileUploadRejection(file)}
       maxSize={MAX_FILE_SIZE}
       accept={FILE_TYPE}
+      name="file"
     >
       <Group
         justify="center"
