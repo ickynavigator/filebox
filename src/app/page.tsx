@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'File Box',
-  description: 'A file dropbox application',
 };
 
 function Page() {

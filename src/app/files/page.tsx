@@ -6,7 +6,7 @@ import { getFilesCached } from '~/actions/files';
 import { FileCard } from '~/components/fileCard';
 
 export const metadata: Metadata = {
-  title: 'List all files',
+  title: 'List files',
 };
 
 interface PageProps {
