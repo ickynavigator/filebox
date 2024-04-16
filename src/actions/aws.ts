@@ -21,13 +21,30 @@ const s3Client = new S3Client({
   },
 });
 
-const fileSchema = z.instanceof(BufferFile, { message: 'Required' });
+interface PresignedURLClient {
+  key: IFile['id'];
+  type?: string;
+  name?: string;
+}
+export async function createPresignedUrl(opts: PresignedURLClient) {
+  const { key, type, name } = opts;
+
+  const command = new PutObjectCommand({
+    Bucket: env.AWS_BUCKET_NAME,
+    Key: key,
+    ContentType: type,
+    Metadata: {
+      'Content-Disposition': `inline; filename="${name}"`,
+    },
+  });
+  return getSignedUrl(s3Client, command, { expiresIn: 3600 });
+}
 
 export async function uploadFormData(values: FormData) {
   const formDataSchema = z.object({
     name: z.string(),
     description: z.string(),
-    fileToUpload: fileSchema,
+    fileToUpload: z.instanceof(BufferFile, { message: 'Required' }),
   });
 
   const { name, description, fileToUpload } = formDataSchema.parse({
@@ -38,8 +55,8 @@ export async function uploadFormData(values: FormData) {
 
   const createdFile = await fileActions.createFile(
     {
-      name: name,
-      description: description,
+      name,
+      description,
       url: `${env.NEXT_PUBLIC_BUCKET_URL}${name}`,
       size: fileToUpload.size,
     },
@@ -71,27 +88,4 @@ export async function deleteFile(Key: IFile['id']) {
   });
   await s3Client.send(command);
   await fileActions.deleteFile(Key);
-}
-
-interface PresignedURLClient {
-  key: IFile['id'];
-  type?: string;
-  name?: string;
-}
-export async function createPresignedUrl(opts: PresignedURLClient) {
-  const { key, type, name } = opts;
-
-  const command = new PutObjectCommand({
-    Bucket: env.AWS_BUCKET_NAME,
-    Key: key,
-    ContentType: type,
-    Metadata: {
-      'Content-Disposition': `inline; filename="${name}"`,
-    },
-  });
-  return getSignedUrl(s3Client, command, { expiresIn: 3600 });
-}
-
-export async function downloadPresignedFile(Key: IFile['id']) {
-  console.log(Key);
 }

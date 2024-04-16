@@ -136,7 +136,7 @@ export function FileUpload({
               {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE).toFixed(2)}mb`}
             </Text>
           )}
-          {children ? children : null}
+          {children || null}
         </Box>
       </Group>
     </Dropzone>

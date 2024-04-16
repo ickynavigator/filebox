@@ -13,6 +13,8 @@ interface Props {
 }
 
 export const SignInForm = (props: Props) => {
+  const { nextPage } = props;
+
   const router = useRouter();
 
   const [loading, setloading] = useState(false);
@@ -32,7 +34,7 @@ export const SignInForm = (props: Props) => {
 
     if (!res?.error) {
       Notifications.success('Successfully authenticated');
-      router.push(props.nextPage);
+      router.push(nextPage);
       return;
     }
 
@@ -45,8 +47,6 @@ export const SignInForm = (props: Props) => {
 
     setError(message);
     Notifications.error(message);
-
-    return;
   };
 
   return (

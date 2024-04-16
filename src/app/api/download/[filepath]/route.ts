@@ -10,7 +10,7 @@ export async function GET(request: NextRequest, opts: RouteParams) {
   const { params } = opts;
   const { filepath } = params;
 
-  const searchParams = request.nextUrl.searchParams;
+  const { searchParams } = request.nextUrl;
 
   const filename =
     searchParams.get('filename') ??

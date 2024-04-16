@@ -1,5 +1,5 @@
-import { Form } from './_form';
 import type { Metadata } from 'next';
+import { Form } from './_form';
 
 export const metadata: Metadata = {
   title: 'Upload',

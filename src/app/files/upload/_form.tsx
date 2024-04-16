@@ -8,8 +8,9 @@ import {
   TextInput,
   Textarea,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { FormEvent, useState } from 'react';
+import { z } from 'zod';
 import { uploadFormData } from '~/actions/aws';
 import { FileUpload, type FileInterface } from '~/components/FileUpload';
 import { MAX_UPLOAD_FILE_SIZE } from '~/lib/constants';
@@ -17,24 +18,25 @@ import { Notifications } from '~/lib/notifications';
 
 interface Props {}
 
+const schema = z.object({
+  name: z
+    .string()
+    .min(1, 'Name is Required')
+    .max(64, 'Name cannot be more than 64 characters'),
+  description: z
+    .string()
+    .max(512, 'Description cannot be more than 512 characters'),
+});
+
 export function Form(props: Props) {
+  // eslint-disable-next-line no-empty-pattern
+  const {} = props;
+
   const [files, setFiles] = useState<FileInterface[]>([]);
 
   const form = useForm({
     initialValues: { name: '', description: '' },
-
-    validate: {
-      name: value =>
-        value.length > 0
-          ? value.length < 60
-            ? null
-            : 'Name cannot be more than 60 characters'
-          : 'Name is required',
-      description: value =>
-        value.length < 500
-          ? null
-          : 'Description cannot be more than 500 characters',
-    },
+    validate: zodResolver(schema),
   });
 
   const onDrop = (fileList: File[]) => {
@@ -83,12 +85,11 @@ export function Form(props: Props) {
           onDrop={onDrop}
           MAX_FILE_SIZE={MAX_UPLOAD_FILE_SIZE}
           singleFile
-          children={
-            <Text size="sm" c="dimmed" inline>
-              Only one file should be uploaded at a time
-            </Text>
-          }
-        />
+        >
+          <Text size="sm" c="dimmed" inline>
+            Only one file should be uploaded at a time
+          </Text>
+        </FileUpload>
 
         {files[0] && (
           <>

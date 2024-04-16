@@ -2,7 +2,6 @@
 
 import {
   ActionIconGroup,
-  Box,
   Card,
   Group,
   Stack,
@@ -12,12 +11,12 @@ import {
 } from '@mantine/core';
 import React from 'react';
 import { IFile } from '~/types';
-import AsyncButton from './AsyncButton';
 import { IconDownload, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
+import AsyncButton from './AsyncButton';
 import ClipboardButton from './copyButton';
 
 interface Props {

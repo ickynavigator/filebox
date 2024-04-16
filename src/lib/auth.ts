@@ -17,9 +17,7 @@ export const {
         passkey: { label: 'Passkey', type: 'passkey' },
       },
       authorize({ passkey }) {
-        const PASSWORD = env.PASSWORD;
-
-        if (passkey === PASSWORD) {
+        if (passkey === env.PASSWORD) {
           return { id: '1', name: 'Admin', email: '', image: '' };
         }
 

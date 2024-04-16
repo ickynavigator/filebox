@@ -14,7 +14,9 @@ interface PageProps {
 }
 
 async function Page(props: PageProps) {
-  const { search } = props.searchParams;
+  const { searchParams } = props;
+  const { search } = searchParams;
+
   const { files } = await getFilesCached({ keyword: search ?? null });
 
   if (files.length <= 0) {
@@ -33,6 +35,7 @@ async function Page(props: PageProps) {
 
   const deleteHandler = async (id: (typeof files)[number]['id']) => {
     'use server';
+
     await deleteFile(id);
   };
 

@@ -1,7 +1,7 @@
 import { Code, Container, Stack, Text, Title } from '@mantine/core';
-import { SignInForm } from './_form';
 import { auth } from '~/lib/auth';
 import { redirect } from 'next/navigation';
+import { SignInForm } from './_form';
 
 interface Props {
   searchParams: {
@@ -10,8 +10,10 @@ interface Props {
 }
 
 const Page = async (props: Props) => {
+  const { searchParams } = props;
+  const { next: nextPage = '/' } = searchParams;
+
   const session = await auth();
-  const nextPage = props.searchParams.next ?? '/';
 
   if (session) {
     redirect(nextPage);
