@@ -21,8 +21,8 @@ const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
 
-const db = globalForPrisma.prisma ?? createPrismaClient();
+const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
+if (env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-export default db;
+export default prisma;
