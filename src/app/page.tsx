@@ -1,38 +1,120 @@
-import { Button, Center, Container, Text, Title } from '@mantine/core';
-import { IconBox, IconFile, IconHeartHandshake } from '@tabler/icons-react';
-import { Metadata } from 'next';
+import {
+  Image,
+  Container,
+  Title,
+  Button,
+  Group,
+  Text,
+  List,
+  ThemeIcon,
+  rem,
+  ListItem,
+  Center,
+  Box,
+} from '@mantine/core';
+import { IconCircleCheck, IconHourglass } from '@tabler/icons-react';
 import Link from 'next/link';
+import ColorSchemeToggle from '~/components/colorSchemeToggle';
+import { auth } from '~/lib/auth';
+import classes from '~/app/page.module.css';
 
-export const metadata: Metadata = {
-  title: 'File Box',
+const iconProps = {
+  style: { width: rem(15), height: rem(15) },
+  stroke: 2,
 };
 
-function Page() {
+function CompletedIcon() {
   return (
-    <Container my="lg">
-      <Title order={1} ta="center">
-        Welcome to FileBox
-      </Title>
-
-      <Center>
-        <IconFile color="blue" size={48} />
-        <IconHeartHandshake color="pink" size={48} />
-        <IconBox color="brown" size={48} />
-      </Center>
-
-      <Text ta="center">A file uploading and downloading site</Text>
-
-      <Center my="lg">
-        <Button component={Link} href="/files/upload" mx="md">
-          Upload a new file
-        </Button>
-
-        <Button component={Link} href="/files" mx="md">
-          View All Files
-        </Button>
-      </Center>
-    </Container>
+    <ThemeIcon size={24} radius="xl">
+      <IconCircleCheck {...iconProps} />
+    </ThemeIcon>
   );
 }
 
-export default Page;
+function OngoingIcon() {
+  return (
+    <ThemeIcon color="yellow" size={24} radius="xl">
+      <IconHourglass {...iconProps} />
+    </ThemeIcon>
+  );
+}
+
+export default async function Page() {
+  const session = await auth();
+
+  return (
+    <Center h="100%">
+      <Container size="md">
+        <Group>
+          <Box maw={rem(480)}>
+            <Title className={classes.title} fw={900} lh={1.2}>
+              A <span className={classes.highlight}>modern</span> file
+              sharing/drop box application
+            </Title>
+
+            <Text c="dimmed" mt="md">
+              Stores Files. Can use tags to organize/share them. Built with
+              Next.js, AWS S3(changing to R2 soon) and Mantine.
+            </Text>
+
+            <List mt={30} spacing="sm" size="sm" icon={<CompletedIcon />}>
+              <ListItem>
+                <b>Share Files</b> - Allow anyone easily access your files
+              </ListItem>
+              <ListItem>
+                <b>Easy Login</b> - Just a single password to login
+              </ListItem>
+              <ListItem icon={<OngoingIcon />}>
+                <b>Auto remove files</b> - coming soon?
+              </ListItem>
+            </List>
+            <Group mt={30}>
+              {session?.user != null ? (
+                <Button
+                  component={Link}
+                  href="/files"
+                  radius="xl"
+                  size="md"
+                  className={classes.control}
+                >
+                  View Files
+                </Button>
+              ) : (
+                <Button
+                  component={Link}
+                  href="/auth/signin"
+                  radius="xl"
+                  size="md"
+                  className={classes.control}
+                >
+                  Login
+                </Button>
+              )}
+
+              <Button
+                component={Link}
+                href="https://github.com/ickynavigator/filebox"
+                target="_blank"
+                variant="default"
+                radius="xl"
+                size="md"
+                className={classes.control}
+              >
+                Source code
+              </Button>
+              <ColorSchemeToggle />
+            </Group>
+          </Box>
+
+          <Image
+            src="/header-1.svg"
+            className={classes.image}
+            alt="Header 1"
+            w={rem(376)}
+            h={rem(356)}
+          />
+        </Group>
+      </Container>
+    </Center>
+  );
+}
