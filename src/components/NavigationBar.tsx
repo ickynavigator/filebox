@@ -1,45 +1,34 @@
-import { Anchor, Group } from '@mantine/core';
-import { IconBox } from '@tabler/icons-react';
-import Link from 'next/link';
-import { auth } from '~/lib/auth';
+import { Anchor, Box, Container, Group } from '@mantine/core';
 import ColorSchemeToggle from './colorSchemeToggle';
 import { SignoutButton } from './signoutButton';
+import FileBoxLogo from './fileBoxLogo';
+import NavigationButton from './NavigationButton';
+import NavigationDrawer from './navigationDrawer';
 
-export const NavigationBar = async () => {
-  const session = await auth();
+export const NavigationBar = async () => (
+  <Box component="header" h={56} style={{ height: '100%' }}>
+    <Container
+      h={56}
+      display="flex"
+      style={{ alignItems: 'center', justifyContent: 'space-between' }}
+    >
+      <Anchor href="/" underline="never">
+        <FileBoxLogo />
+      </Anchor>
 
-  return (
-    <Group style={{ height: '100%' }} px={20} justify="space-between">
-      <Group>
-        <Anchor href="/">
-          <IconBox size={32} />
-        </Anchor>
+      <Group gap="xs" visibleFrom="sm">
+        <NavigationButton href="/files">List all files</NavigationButton>
 
-        <Anchor
-          component={Link}
-          href="/files"
-          size="xl"
-          tt="capitalize"
-          fw="bold"
-        >
-          List all files
-        </Anchor>
+        <NavigationButton href="/files/upload">Upload a file</NavigationButton>
 
-        <Anchor
-          component={Link}
-          href="/files/upload"
-          size="xl"
-          tt="capitalize"
-          fw="bold"
-        >
-          Upload a file
-        </Anchor>
+        <Group gap="xs">
+          <SignoutButton />
+
+          <ColorSchemeToggle />
+        </Group>
       </Group>
 
-      <Group>
-        {session?.user != null && <SignoutButton />}
-        <ColorSchemeToggle />
-      </Group>
-    </Group>
-  );
-};
+      <NavigationDrawer signoutbutton={<SignoutButton />} />
+    </Container>
+  </Box>
+);

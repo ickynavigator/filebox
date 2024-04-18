@@ -1,18 +1,9 @@
-'use client';
+import { auth } from '~/lib/auth';
+import { Suspense } from 'react';
+import { InnerSignoutButton } from './signoutButton.client';
 
-import { ActionIcon } from '@mantine/core';
-import { IconLogout } from '@tabler/icons-react';
-import { signOut } from '~/lib/auth.react';
-import React from 'react';
+export const SignoutButton = async () => {
+  const session = await auth();
 
-export const SignoutButton = () => {
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
-  return (
-    <ActionIcon variant="default" onClick={handleSignOut}>
-      <IconLogout size={16} />
-    </ActionIcon>
-  );
+  return <Suspense>{session?.user ? <InnerSignoutButton /> : null}</Suspense>;
 };
