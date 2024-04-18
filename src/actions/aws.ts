@@ -25,18 +25,28 @@ interface PresignedURLClient {
   key: IFile['id'];
   type?: string;
   name?: string;
+  description?: string;
 }
 export async function createPresignedUrl(opts: PresignedURLClient) {
-  const { key, type, name } = opts;
+  const { key, type, name, description } = opts;
+
+  const Metadata: Record<string, string> = {};
+
+  if (name) {
+    Metadata.Name = name;
+  }
+
+  if (description) {
+    Metadata.Description = description;
+  }
 
   const command = new PutObjectCommand({
     Bucket: env.AWS_BUCKET_NAME,
     Key: key,
     ContentType: type,
-    Metadata: {
-      'Content-Disposition': `inline; filename="${name}"`,
-    },
+    Metadata,
   });
+
   return getSignedUrl(s3Client, command, { expiresIn: 3600 });
 }
 
@@ -67,6 +77,7 @@ export async function uploadFormData(values: FormData) {
     key: createdFile.id,
     type: fileToUpload.type,
     name: fileToUpload.name,
+    description,
   });
 
   await fetch(presignedUrl, {
