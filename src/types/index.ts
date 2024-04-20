@@ -1,4 +1,5 @@
-import { IFile } from '@prisma/client';
+import { IFile, Tag } from '@prisma/client';
+import { z } from 'zod';
 
 export enum Auth {
   Authorized = 0,
@@ -7,21 +8,35 @@ export enum Auth {
 
 export type BaseFile = Pick<IFile, 'name' | 'size' | 'description' | 'url'>;
 
-export type { IFile };
-
 export interface IFileReturn {
-  files: IFile[];
+  files: Array<IFile & { tags: Tag[] }>;
   page?: number;
   pages?: number;
 }
 
-export const isIFile = (value: unknown): value is IFile => {
-  const file = value as IFile;
+export const timeSchema = z.object({
+  updatedAt: z.date(),
+  createdAt: z.date(),
+});
 
-  return (
-    typeof file.name === 'string' &&
-    typeof file.description === 'string' &&
-    typeof file.url === 'string' &&
-    typeof file.size === 'number'
-  );
-};
+export const tagSchema = z
+  .object({
+    id: z.string(),
+    name: z.string(),
+  })
+  .merge(timeSchema);
+
+export const iFileSchema = z
+  .object({
+    id: z.string().optional(),
+    description: z.string().optional(),
+    name: z.string(),
+    url: z.string(),
+    size: z.number().optional(),
+
+    tags: z.array(tagSchema).default([]),
+  })
+  .merge(timeSchema);
+
+export const isIFile = (value: unknown): value is IFile =>
+  iFileSchema.safeParse(value).success;

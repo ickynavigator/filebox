@@ -15,8 +15,8 @@ import {
   TAG_INPUT_DIVIDER,
   TAG_INPUT_GENERATED_PREFIX,
 } from '~/lib/constants';
-import { IFile } from '~/types';
 import { revalidateTag } from 'next/cache';
+import type { IFile } from '@prisma/client';
 import { createBatchTags } from './tags';
 
 const s3Client = new S3Client({
