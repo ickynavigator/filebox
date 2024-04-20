@@ -133,7 +133,7 @@ export function FileUpload({
           </Text>
           {MAX_FILE_SIZE && (
             <Text size="sm" c="dimmed" inline mt={7}>
-              {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE).toFixed(2)}mb`}
+              {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE, false)}mb`}
             </Text>
           )}
           {children || null}
