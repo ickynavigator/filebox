@@ -20,7 +20,7 @@ import {
 } from '@mantine/core';
 import type { Tag } from '@prisma/client';
 import React, { useMemo, useState } from 'react';
-import { TAGS_DIVIDER } from '~/lib/constants';
+import { TAG_INPUT_DIVIDER, TAG_INPUT_GENERATED_PREFIX } from '~/lib/constants';
 import { IconSparkles } from '@tabler/icons-react';
 import classes from '~/components/customTagInput.module.css';
 
@@ -30,7 +30,6 @@ interface Props {
 }
 
 const CREATE = '$create';
-const NEW_TAG_PREFIX = 'NEW_TAG_GENERATED_';
 
 export const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
   const findTag = (id: Tag['id']) => data.find(tag => tag.id === id);
@@ -39,6 +38,8 @@ export const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
     const tag = findTag(id);
 
     if (!tag) {
+      const nameToSearch = `${id}`.replace(TAG_INPUT_GENERATED_PREFIX, '');
+
       return (
         <Pill
           key={id}
@@ -46,7 +47,7 @@ export const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
           onRemove={() => removeCB(id)}
           className={classes.GeneratedPill}
         >
-          {id}
+          {nameToSearch}
         </Pill>
       );
     }
@@ -78,8 +79,8 @@ export default function CustomTagInput(props: Props) {
 
   const handleValueSelect = (val: string) => {
     if (val === CREATE) {
-      const name = search.trim();
-      const id = `${NEW_TAG_PREFIX}${data.length + 1}`;
+      const name = `${TAG_INPUT_GENERATED_PREFIX}${search.trim()}`;
+      const id = `${TAG_INPUT_GENERATED_PREFIX}${data.length + 1}`;
       const currentDate = new Date();
 
       setData(current => [
@@ -90,7 +91,7 @@ export default function CustomTagInput(props: Props) {
 
       setValue(current => [...current, name]);
     } else {
-      const isGeneratedTag = val.startsWith(NEW_TAG_PREFIX);
+      const isGeneratedTag = val.startsWith(TAG_INPUT_GENERATED_PREFIX);
 
       if (isGeneratedTag) {
         const tag = data.find(item => item.id === val);
@@ -123,10 +124,13 @@ export default function CustomTagInput(props: Props) {
     () =>
       data
         .filter(item =>
-          item.name.toLowerCase().includes(search.trim().toLowerCase()),
+          item.name
+            .replace(TAG_INPUT_GENERATED_PREFIX, '')
+            .toLowerCase()
+            .includes(search.trim().toLowerCase()),
         )
         .map(item => {
-          const generatedTag = item.id.startsWith(NEW_TAG_PREFIX);
+          const generatedTag = item.id.startsWith(TAG_INPUT_GENERATED_PREFIX);
 
           const active = generatedTag
             ? value.includes(item.name)
@@ -142,7 +146,9 @@ export default function CustomTagInput(props: Props) {
               <Group gap="sm" justify="space-between">
                 <Group>
                   {active ? <CheckIcon size={12} /> : null}
-                  <span>{item.name}</span>
+                  <span>
+                    {item.name.replace(TAG_INPUT_GENERATED_PREFIX, '')}
+                  </span>
                 </Group>
 
                 {generatedTag ? (
@@ -225,7 +231,7 @@ export default function CustomTagInput(props: Props) {
       <ComboboxHiddenInput
         name="tags"
         value={value}
-        valuesDivider={TAGS_DIVIDER}
+        valuesDivider={TAG_INPUT_DIVIDER}
       />
     </>
   );

@@ -3,4 +3,6 @@ export const TAGS = {
   FILES: 'files',
   TAGS: 'tags',
 } as const;
-export const TAGS_DIVIDER = '<-!->';
+
+export const TAG_INPUT_GENERATED_PREFIX = 'NEW_TAG_GENERATED_';
+export const TAG_INPUT_DIVIDER = '<-!->';
