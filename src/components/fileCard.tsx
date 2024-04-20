@@ -18,6 +18,7 @@ import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
 import type { IFileReturn } from '~/types';
+import { timeFromNow } from '~/lib/dateTime';
 import AsyncButton from './AsyncButton';
 import ClipboardButton from './copyButton';
 import CustomPill from './customPill';
@@ -64,6 +65,12 @@ export const FileCard = (props: Props) => {
             />
           </ActionIconGroup>
         </Group>
+
+        {file.expiresAt ? (
+          <Text size="sm" lh={1.5} c="red">
+            Expires: {timeFromNow(file.expiresAt)}
+          </Text>
+        ) : null}
 
         {file.size ? (
           <Text size="sm" lh={1.5} c="dimmed">
