@@ -1,5 +1,6 @@
 import prisma from '~/lib/prisma';
-import { BaseFile, IFile, IFileReturn } from '~/types';
+import type { IFile } from '@prisma/client';
+import type { BaseFile, IFileReturn } from '~/types';
 import { unstable_cache as cache, revalidateTag } from 'next/cache';
 import { TAGS } from '~/lib/constants';
 
@@ -47,6 +48,7 @@ export async function getFiles(options: GetFilesOptions) {
       take: pageSize,
       skip: pageSize * (page - 1),
       where: { ...keywords },
+      include: { tags: true },
     });
 
     const count = await prisma.iFile.count({ where: { ...keywords } });
@@ -54,7 +56,10 @@ export async function getFiles(options: GetFilesOptions) {
     result.page = page;
     result.pages = Math.ceil(count / pageSize);
   } else {
-    result.files = await prisma.iFile.findMany({ where: { OR: keywords.OR } });
+    result.files = await prisma.iFile.findMany({
+      where: { OR: keywords.OR },
+      include: { tags: true },
+    });
   }
 
   return result;
