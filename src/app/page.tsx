@@ -64,8 +64,20 @@ export default async function Page() {
               <ListItem>
                 <b>Easy Login</b> - Just a single password to login
               </ListItem>
+              <ListItem>
+                <b>Auto remove files</b>
+              </ListItem>
               <ListItem icon={<OngoingIcon />}>
-                <b>Auto remove files</b> - coming soon?
+                <b>R2</b> - Changing from S3 to R2
+              </ListItem>
+              <ListItem icon={<OngoingIcon />}>
+                <b>Tags</b> - Organize your files with tags, share them
+              </ListItem>
+              <ListItem icon={<OngoingIcon />}>
+                <b>Search</b> - Filter through your files
+              </ListItem>
+              <ListItem icon={<OngoingIcon />}>
+                <b>Public Upload Endpoint</b> - Allow file uploads from anyone
               </ListItem>
             </List>
             <Group mt={30}>
