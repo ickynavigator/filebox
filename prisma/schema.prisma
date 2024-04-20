@@ -9,11 +9,12 @@ datasource db {
 }
 
 model IFile {
-  id          String  @id @default(cuid())
+  id          String    @id @default(cuid())
   description String?
   name        String
   url         String
   size        Int?
+  expiresAt   DateTime?
 
   tags Tag[]
 
