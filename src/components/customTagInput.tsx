@@ -154,7 +154,7 @@ export default function CustomTagInput(props: Props) {
                 {generatedTag ? (
                   <ThemeIcon
                     color="yellow"
-                    variant="outline"
+                    variant="light"
                     radius="xl"
                     size="sm"
                   >
@@ -219,11 +219,9 @@ export default function CustomTagInput(props: Props) {
                 </ComboboxOption>
               )}
 
-            {exactOptionMatch &&
-              search.trim().length > 0 &&
-              options.length === 0 && (
-                <ComboboxEmpty>Nothing found</ComboboxEmpty>
-              )}
+            {search.trim().length <= 0 && options.length === 0 && (
+              <ComboboxEmpty>Nothing found</ComboboxEmpty>
+            )}
           </ComboboxOptions>
         </ComboboxDropdown>
       </Combobox>
