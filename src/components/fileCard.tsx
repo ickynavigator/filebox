@@ -76,7 +76,7 @@ export const FileCard = (props: Props) => {
         </Text>
 
         {file.tags.length > 0 ? (
-          <ScrollArea>
+          <ScrollArea offsetScrollbars>
             <Group gap="xs" wrap="nowrap">
               {file.tags.map(tag => (
                 <CustomPill key={tag.id} tag={tag} />
