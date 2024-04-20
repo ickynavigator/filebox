@@ -4,23 +4,26 @@ import {
   ActionIconGroup,
   Card,
   Group,
+  ScrollArea,
   Stack,
   Text,
   Title,
   rem,
 } from '@mantine/core';
 import React from 'react';
-import { IFile } from '~/types';
+import type { IFile } from '@prisma/client';
 import { IconDownload, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
+import type { IFileReturn } from '~/types';
 import AsyncButton from './AsyncButton';
 import ClipboardButton from './copyButton';
+import CustomPill from './customPill';
 
 interface Props {
-  file: IFile;
+  file: IFileReturn['files'][number];
   deleteHandler: (id: IFile['id']) => Promise<void>;
 }
 
@@ -71,6 +74,16 @@ export const FileCard = (props: Props) => {
         <Text size="sm" lh={1.5} c="dimmed">
           {file.description || 'No description'}
         </Text>
+
+        {file.tags.length > 0 ? (
+          <ScrollArea>
+            <Group gap="xs" wrap="nowrap">
+              {file.tags.map(tag => (
+                <CustomPill key={tag.id} tag={tag} />
+              ))}
+            </Group>
+          </ScrollArea>
+        ) : null}
       </Stack>
     </Card>
   );
