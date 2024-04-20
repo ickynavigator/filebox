@@ -16,6 +16,10 @@ const env = createEnv({
     NEXT_AUTH_SECRET: z.string().default('secret'),
 
     CRON_SECRET: z.string().default('secret'),
+
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
   },
   client: {
     NEXT_PUBLIC_BUCKET_URL: z.string(),
