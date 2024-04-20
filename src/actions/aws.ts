@@ -62,7 +62,7 @@ export async function uploadFormData(values: FormData) {
     description: z.string(),
     fileToUpload: z.instanceof(BufferFile, { message: 'Required' }),
     tags: z.string().transform(val => {
-      const tags = val.split(TAG_INPUT_DIVIDER);
+      const tags = val.split(TAG_INPUT_DIVIDER).filter(tag => tag !== '');
 
       const existingTags: string[] = [];
       const generatedTags: string[] = [];
@@ -77,6 +77,14 @@ export async function uploadFormData(values: FormData) {
 
       return { existing: existingTags, generated: generatedTags };
     }),
+    expiresAt: z
+      .union([z.date(), z.null(), z.literal(''), z.string().datetime()])
+      .transform(val => {
+        if (val === '') return null;
+        if (typeof val === 'string') return new Date(val);
+
+        return val;
+      }),
   });
 
   const parsedFormData = formDataSchema.parse({
@@ -84,9 +92,10 @@ export async function uploadFormData(values: FormData) {
     description: values.get('description'),
     fileToUpload: values.get('file'),
     tags: values.get('tags'),
+    expiresAt: values.get('expiryDate'),
   });
 
-  const { name, description, fileToUpload, tags } = parsedFormData;
+  const { name, description, fileToUpload, tags, expiresAt } = parsedFormData;
 
   const createdTags = await createBatchTags(tags.generated);
   const createdTagsIds = createdTags.map(tag => tag.id);
@@ -98,6 +107,7 @@ export async function uploadFormData(values: FormData) {
       description,
       url: `${env.NEXT_PUBLIC_BUCKET_URL}${name}`,
       size: fileToUpload.size,
+      expiresAt,
     },
     env.NEXT_PUBLIC_BUCKET_URL,
     fileTags,

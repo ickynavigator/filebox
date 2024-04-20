@@ -9,6 +9,7 @@ import {
   TextInput,
   Textarea,
 } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
 import { Tag } from '@prisma/client';
 import { FormEvent, useState } from 'react';
@@ -31,6 +32,7 @@ const schema = z.object({
   description: z
     .string()
     .max(512, 'Description cannot be more than 512 characters'),
+  expiryDate: z.union([z.date(), z.string().datetime(), z.null()]),
 });
 
 export function Form(props: Props) {
@@ -39,7 +41,7 @@ export function Form(props: Props) {
   const [files, setFiles] = useState<FileInterface[]>([]);
 
   const form = useForm({
-    initialValues: { name: '', description: '' },
+    initialValues: { name: '', description: '', expiryDate: null },
     validate: zodResolver(schema),
   });
 
@@ -70,7 +72,6 @@ export function Form(props: Props) {
 
       Notifications.success('File uploaded successfully');
 
-      return;
       form.reset();
       setFiles([]);
     } catch (error) {
@@ -102,11 +103,20 @@ export function Form(props: Props) {
                 name="name"
                 placeholder="Enter file name"
                 label="File Name"
-                required
                 {...form.getInputProps('name')}
               />
 
               <CustomTagInput tags={tags} />
+
+              <DateInput
+                name="expiryDate"
+                label="Expiry Date"
+                description="Select the date when the file should expire | Still in development"
+                placeholder="Select date"
+                minDate={new Date()}
+                clearable
+                {...form.getInputProps('expiryDate')}
+              />
 
               <Textarea
                 name="description"
