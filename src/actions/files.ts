@@ -1,6 +1,6 @@
 import prisma from '~/lib/prisma';
 import { BaseFile, IFile, IFileReturn } from '~/types';
-import { unstable_cache as cache } from 'next/cache';
+import { unstable_cache as cache, revalidateTag } from 'next/cache';
 import { TAGS } from '~/lib/constants';
 
 interface GetFilesOptions {
@@ -78,25 +78,9 @@ export async function createFile(
     data: { url: `${baseURL}${createdFile.id}` },
   });
 
+  revalidateTag(TAGS.FILES);
+
   return res;
-}
-
-export async function getFile(id: IFile['id']) {
-  const file = await prisma.iFile.findUnique({ where: { id } });
-
-  if (!file) throw new Error('File not found');
-
-  return file;
-}
-
-export async function updateFile(id: IFile['id'], data: Partial<IFile>) {
-  const file = await prisma.iFile.findUnique({ where: { id } });
-
-  if (!file) throw new Error('File not found');
-
-  const updatedFile = await prisma.iFile.update({ where: { id }, data });
-
-  return updatedFile;
 }
 
 export async function deleteFile(id: IFile['id']) {
@@ -105,4 +89,6 @@ export async function deleteFile(id: IFile['id']) {
   if (!file) throw new Error('File not found');
 
   await prisma.iFile.delete({ where: { id } });
+
+  revalidateTag(TAGS.FILES);
 }

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '~/lib/prisma';
-import { unstable_cache as cache } from 'next/cache';
+import { unstable_cache as cache, revalidateTag } from 'next/cache';
 import { TAGS } from '~/lib/constants';
 import type { Tag } from '@prisma/client';
 
@@ -25,6 +25,8 @@ export async function createBatchTags(names: Tag['name'][]) {
   const res = await prisma.$transaction(
     names.map(name => prisma.tag.create({ data: { name } })),
   );
+
+  revalidateTag(TAGS.TAGS);
 
   return res;
 }
