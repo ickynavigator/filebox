@@ -6,7 +6,7 @@ export enum Auth {
   Unauthorized = 1,
 }
 
-export type BaseFile = Pick<IFile, 'name' | 'size' | 'description' | 'url'>;
+export type BaseFile = BetterOmit<IFile, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface IFileReturn {
   files: Array<IFile & { tags: Tag[] }>;
