@@ -1,0 +1,9 @@
+@keyframes glow-pulse {
+  50% {
+    box-shadow: rem(0) rem(0) rem(10) var(--mantine-color-error);
+  }
+}
+
+.ExpiringSoon {
+  animation: glow-pulse 2s infinite;
+}

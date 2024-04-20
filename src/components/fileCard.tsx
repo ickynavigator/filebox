@@ -19,9 +19,11 @@ import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
 import type { IFileReturn } from '~/types';
 import { timeFromNow } from '~/lib/dateTime';
+import cx from 'clsx';
 import AsyncButton from './AsyncButton';
 import ClipboardButton from './copyButton';
 import CustomPill from './customPill';
+import classes from './fileCard.module.css';
 
 interface Props {
   file: IFileReturn['files'][number];
@@ -32,8 +34,20 @@ export const FileCard = (props: Props) => {
   const router = useRouter();
   const { file, deleteHandler } = props;
 
+  const expiryTime = timeFromNow(file.expiresAt);
+
+  const expiringToday =
+    expiryTime.includes('hours') ||
+    expiryTime.includes('minutes') ||
+    expiryTime.includes('seconds');
+
   return (
-    <Card shadow="md" p="lg" withBorder>
+    <Card
+      shadow="md"
+      p="lg"
+      withBorder
+      className={cx({ [classes.ExpiringSoon]: expiringToday })}
+    >
       <Stack gap="xs">
         <Group justify="space-between" mb={5}>
           <Title order={3}>{file.name}</Title>
@@ -68,7 +82,7 @@ export const FileCard = (props: Props) => {
 
         {file.expiresAt ? (
           <Text size="sm" lh={1.5} c="red">
-            Expires: {timeFromNow(file.expiresAt)}
+            Expires: {expiryTime}
           </Text>
         ) : null}
 
