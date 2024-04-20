@@ -64,13 +64,21 @@ export const getFilesCached = cache(getFiles, ['FILE_LIST'], {
   tags: [TAGS.FILES],
 });
 
-export async function createFile(file: BaseFile, baseURL: string) {
-  const createdFile = await prisma.iFile.create({ data: file });
+export async function createFile(
+  file: BaseFile,
+  baseURL: string,
+  tags: string[] = [],
+) {
+  const createdFile = await prisma.iFile.create({
+    data: { ...file, tags: { connect: tags.map(tagId => ({ id: tagId })) } },
+  });
 
-  return prisma.iFile.update({
+  const res = prisma.iFile.update({
     where: { id: createdFile.id },
     data: { url: `${baseURL}${createdFile.id}` },
   });
+
+  return res;
 }
 
 export async function getFile(id: IFile['id']) {

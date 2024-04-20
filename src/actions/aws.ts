@@ -10,8 +10,13 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { z } from 'zod';
 import * as fileActions from '~/actions/files';
 import env from '~/env/index.mjs';
-import { TAGS } from '~/lib/constants';
+import {
+  TAGS,
+  TAG_INPUT_DIVIDER,
+  TAG_INPUT_GENERATED_PREFIX,
+} from '~/lib/constants';
 import { IFile } from '~/types';
+import { createBatchTags } from './tags';
 
 const s3Client = new S3Client({
   region: env.AWS_REGION,
@@ -55,14 +60,37 @@ export async function uploadFormData(values: FormData) {
     name: z.string(),
     description: z.string(),
     fileToUpload: z.instanceof(BufferFile, { message: 'Required' }),
+    tags: z.string().transform(val => {
+      const tags = val.split(TAG_INPUT_DIVIDER);
+
+      const existingTags: string[] = [];
+      const generatedTags: string[] = [];
+
+      tags.forEach(tag => {
+        if (tag.startsWith(TAG_INPUT_GENERATED_PREFIX)) {
+          generatedTags.push(tag.replace(TAG_INPUT_GENERATED_PREFIX, ''));
+        } else {
+          existingTags.push(tag);
+        }
+      });
+
+      return { existing: existingTags, generated: generatedTags };
+    }),
   });
 
-  const { name, description, fileToUpload } = formDataSchema.parse({
+  const parsedFormData = formDataSchema.parse({
     name: values.get('name'),
     description: values.get('description'),
     fileToUpload: values.get('file'),
+    tags: values.get('tags'),
   });
 
+  const { name, description, fileToUpload, tags } = parsedFormData;
+
+  const createdTags = await createBatchTags(tags.generated);
+  const createdTagsIds = createdTags.map(tag => tag.id);
+
+  const fileTags = [...tags.existing, ...createdTagsIds];
   const createdFile = await fileActions.createFile(
     {
       name,
@@ -71,6 +99,7 @@ export async function uploadFormData(values: FormData) {
       size: fileToUpload.size,
     },
     env.NEXT_PUBLIC_BUCKET_URL,
+    fileTags,
   );
 
   const presignedUrl = await createPresignedUrl({
