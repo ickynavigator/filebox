@@ -14,6 +14,8 @@ const env = createEnv({
     DATABASE_TOKEN: z.string(),
 
     NEXT_AUTH_SECRET: z.string().default('secret'),
+
+    CRON_SECRET: z.string().default('secret'),
   },
   client: {
     NEXT_PUBLIC_BUCKET_URL: z.string(),
