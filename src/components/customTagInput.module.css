@@ -1,0 +1,17 @@
+@keyframes glow-pulse {
+  50% {
+    box-shadow: rem(0) rem(0) rem(10) var(--mantine-primary-color-filled);
+  }
+}
+
+.GeneratedPill {
+  border-color: var(--mantine-primary-color-filled);
+  box-shadow: rem(0) rem(0) rem(5) var(--mantine-primary-color-filled);
+  animation: glow-pulse 2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .GeneratedPill {
+    animation: none;
+  }
+}

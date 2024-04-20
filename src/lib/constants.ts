@@ -3,3 +3,4 @@ export const TAGS = {
   FILES: 'files',
   TAGS: 'tags',
 } as const;
+export const TAGS_DIVIDER = '<-!->';
