@@ -22,6 +22,10 @@ export const getTagsCached = cache(getTags, ['tags'], {
 });
 
 export async function createBatchTags(names: Tag['name'][]) {
+  if (!names.length || names.length === 0) {
+    return [];
+  }
+
   const res = await prisma.$transaction(
     names.map(name => prisma.tag.create({ data: { name } })),
   );
