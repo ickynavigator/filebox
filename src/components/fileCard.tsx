@@ -25,6 +25,7 @@ import AsyncButton from './AsyncButton';
 import ClipboardButton from './copyButton';
 import CustomPill from './customPill';
 import classes from './fileCard.module.css';
+import ElementJoin from './elementJoin';
 
 interface Props {
   file: IFileReturn['files'][number];
@@ -54,17 +55,21 @@ export const FileCard = (props: Props) => {
           <Title order={3}>{file.name}</Title>
         </Group>
 
-        {file.expiresAt ? (
-          <Text size="sm" lh={1.5} c="red">
-            Expires: {expiryTime}
-          </Text>
-        ) : null}
+        <Text size="sm" lh={1.5}>
+          <ElementJoin>
+            {file.size ? (
+              <Text inherit c="dimmed" component="span">
+                {bytesToMegaBytes(file?.size).toFixed(2)}MB
+              </Text>
+            ) : null}
 
-        {file.size ? (
-          <Text size="sm" lh={1.5} c="dimmed">
-            {bytesToMegaBytes(file?.size).toFixed(2)}MB
-          </Text>
-        ) : null}
+            {file.expiresAt ? (
+              <Text inherit c="red" component="span">
+                Expires: {expiryTime}
+              </Text>
+            ) : null}
+          </ElementJoin>
+        </Text>
 
         <Text size="sm" lh={1.5} c="dimmed">
           {file.description || 'No description'}
