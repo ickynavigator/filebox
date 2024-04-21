@@ -58,7 +58,7 @@ export const FileCard = (props: Props) => {
         <Text size="sm" lh={1.5}>
           <ElementJoin>
             {file.size ? (
-              <Text inherit c="dimmed" component="span">
+              <Text inherit component="span">
                 {bytesToMegaBytes(file?.size).toFixed(2)}MB
               </Text>
             ) : null}
