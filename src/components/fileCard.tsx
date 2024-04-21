@@ -71,7 +71,7 @@ export const FileCard = (props: Props) => {
           </ElementJoin>
         </Text>
 
-        <Text size="sm" lh={1.5} c="dimmed">
+        <Text size="sm" lh={1.5} c="dimmed" style={{ whiteSpace: 'pre-wrap' }}>
           {file.description || 'No description'}
         </Text>
 
