@@ -52,6 +52,35 @@ export const FileCard = (props: Props) => {
       <Stack gap="xs">
         <Group justify="space-between" mb={5}>
           <Title order={3}>{file.name}</Title>
+        </Group>
+
+        {file.expiresAt ? (
+          <Text size="sm" lh={1.5} c="red">
+            Expires: {expiryTime}
+          </Text>
+        ) : null}
+
+        {file.size ? (
+          <Text size="sm" lh={1.5} c="dimmed">
+            {bytesToMegaBytes(file?.size).toFixed(2)}MB
+          </Text>
+        ) : null}
+
+        <Text size="sm" lh={1.5} c="dimmed">
+          {file.description || 'No description'}
+        </Text>
+
+        {file.tags.length > 0 ? (
+          <ScrollArea offsetScrollbars>
+            <Group gap="xs" wrap="nowrap">
+              {file.tags.map(tag => (
+                <CustomPill key={tag.id} tag={tag} />
+              ))}
+            </Group>
+          </ScrollArea>
+        ) : null}
+
+        <Group justify="space-between" mb={5}>
           <ActionIconGroup>
             <ClipboardButton text={file.url} />
 
@@ -94,32 +123,6 @@ export const FileCard = (props: Props) => {
             />
           </ActionIconGroup>
         </Group>
-
-        {file.expiresAt ? (
-          <Text size="sm" lh={1.5} c="red">
-            Expires: {expiryTime}
-          </Text>
-        ) : null}
-
-        {file.size ? (
-          <Text size="sm" lh={1.5} c="dimmed">
-            {bytesToMegaBytes(file?.size).toFixed(2)}MB
-          </Text>
-        ) : null}
-
-        <Text size="sm" lh={1.5} c="dimmed">
-          {file.description || 'No description'}
-        </Text>
-
-        {file.tags.length > 0 ? (
-          <ScrollArea offsetScrollbars>
-            <Group gap="xs" wrap="nowrap">
-              {file.tags.map(tag => (
-                <CustomPill key={tag.id} tag={tag} />
-              ))}
-            </Group>
-          </ScrollArea>
-        ) : null}
       </Stack>
     </Card>
   );
