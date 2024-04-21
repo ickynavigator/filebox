@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Center,
-  Container,
-  Group,
-  ScrollArea,
-  Stack,
-} from '@mantine/core';
+import { Alert, Container, Group, ScrollArea, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { Metadata } from 'next';
 import { deleteFile } from '~/actions/aws';
@@ -30,20 +23,6 @@ async function Page(props: PageProps) {
 
   const tags = await getTagsCached();
 
-  if (files.length <= 0) {
-    return (
-      <Center py="md" className="h-100">
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          title="Bummer!"
-          color="yellow"
-        >
-          No files found.
-        </Alert>
-      </Center>
-    );
-  }
-
   const deleteHandler = async (id: (typeof files)[number]['id']) => {
     'use server';
 
@@ -63,9 +42,15 @@ async function Page(props: PageProps) {
           </ScrollArea>
         ) : null}
 
-        {files.map(file => (
-          <FileCard key={file.id} file={file} deleteHandler={deleteHandler} />
-        ))}
+        {files.length > 0 ? (
+          files.map(file => (
+            <FileCard key={file.id} file={file} deleteHandler={deleteHandler} />
+          ))
+        ) : (
+          <Alert icon={<IconAlertCircle />} color="yellow">
+            No files found.
+          </Alert>
+        )}
       </Stack>
     </Container>
   );
