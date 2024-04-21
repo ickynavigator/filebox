@@ -33,7 +33,7 @@ async function Page(props: PageProps) {
     <Container py="lg">
       <Stack>
         {tags.length > 0 ? (
-          <ScrollArea offsetScrollbars>
+          <ScrollArea offsetScrollbars scrollbars="y">
             <Group gap="xs" wrap="nowrap">
               {tags.map(tag => (
                 <CustomPill key={tag.id} tag={tag} />
