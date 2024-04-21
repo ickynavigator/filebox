@@ -14,7 +14,7 @@ import ColorSchemeToggle from './colorSchemeToggle';
 import FileBoxLogo from './fileBoxLogo';
 import NavigationButton from './NavigationButton';
 
-export interface NavigationDrawerProps {
+interface NavigationDrawerProps {
   signoutbutton: React.ReactNode;
 }
 

@@ -2,9 +2,7 @@ import { NotificationData, notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 
-export const ICON_STROKE_WIDTH = 1;
-
-export const notificationBase = (props: NotificationData) => {
+const notificationBase = (props: NotificationData) => {
   notifications.show({
     ...props,
   });

@@ -5,6 +5,3 @@ export const bricolage = BricolageGrotesque({
   display: 'swap',
   adjustFontFallback: false,
 });
-
-
-export default {}

@@ -31,7 +31,7 @@ interface Props {
 
 const CREATE = '$create';
 
-export const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
+const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
   const findTag = (id: Tag['id']) => data.find(tag => tag.id === id);
 
   return (id: Tag['id']) => {

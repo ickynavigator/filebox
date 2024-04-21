@@ -9,7 +9,7 @@ interface GetTagsOpts {
   query?: Tag['name'];
 }
 
-export async function getTags(opts?: GetTagsOpts) {
+async function getTags(opts?: GetTagsOpts) {
   const { query } = opts || {};
 
   return prisma.tag.findMany({

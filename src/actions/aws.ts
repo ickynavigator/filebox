@@ -33,7 +33,7 @@ interface PresignedURLClient {
   name?: string;
   description?: string;
 }
-export async function createPresignedUrl(opts: PresignedURLClient) {
+async function createPresignedUrl(opts: PresignedURLClient) {
   const { key, type, name, description } = opts;
 
   const Metadata: Record<string, string> = {};

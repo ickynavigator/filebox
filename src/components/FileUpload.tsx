@@ -24,7 +24,7 @@ export interface FileInterface {
   type: string;
 }
 
-export interface FileUploadProps {
+interface FileUploadProps {
   files: FileInterface[];
   setFiles: (files: FileInterface[]) => void;
 

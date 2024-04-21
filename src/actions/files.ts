@@ -11,7 +11,7 @@ interface GetFilesOptions {
   param?: string;
   keyword?: string | null;
 }
-export async function getFiles(options: GetFilesOptions) {
+async function getFiles(options: GetFilesOptions) {
   const {
     pageSize = 10,
     page = 1,
