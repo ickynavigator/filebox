@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ActionIcon,
   ActionIconGroup,
   Card,
   Group,
@@ -8,12 +9,12 @@ import {
   Stack,
   Text,
   Title,
+  Tooltip,
   rem,
 } from '@mantine/core';
 import React from 'react';
 import type { IFile } from '@prisma/client';
-import { IconDownload, IconX } from '@tabler/icons-react';
-import Link from 'next/link';
+import { IconDownload, IconEye, IconX } from '@tabler/icons-react';
 import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
 import { bytesToMegaBytes } from '~/lib/utils';
@@ -53,17 +54,31 @@ export const FileCard = (props: Props) => {
           <Title order={3}>{file.name}</Title>
           <ActionIconGroup>
             <ClipboardButton text={file.url} />
-            <AsyncButton
-              label="Download"
-              Icon={<IconDownload style={{ width: rem(16) }} />}
-              buttonProps={{
-                download: true,
-                component: Link,
-                rel: 'noopener noreferrer',
-                target: '_blank',
-                href: `api/download/${encodeURIComponent(file.url)}${file.name ? `?filename=${encodeURIComponent(file.name)}` : ''}`,
-              }}
-            />
+
+            <Tooltip label="Preview" withArrow>
+              <ActionIcon
+                color="green"
+                variant="outline"
+                component="a"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={`${file.url}`}
+              >
+                <IconEye style={{ width: rem(16) }} />
+              </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label="Download" withArrow>
+              <ActionIcon
+                variant="outline"
+                component="a"
+                rel="noopener noreferrer"
+                target="_blank"
+                href={`api/download/${encodeURIComponent(file.url)}${file.name ? `?filename=${encodeURIComponent(file.name)}` : ''}`}
+              >
+                <IconDownload style={{ width: rem(16) }} />
+              </ActionIcon>
+            </Tooltip>
 
             <AsyncButton
               color="red"
