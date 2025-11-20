@@ -9,8 +9,6 @@ const config = {
   tabWidth: 2,
   useTabs: false,
 
-  jsxSingleQuote: true,
-
   plugins: ['@ianvs/prettier-plugin-sort-imports'],
 
   // #region @ianvs/prettier-plugin-sort-imports
