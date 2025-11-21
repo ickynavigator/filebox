@@ -80,7 +80,7 @@ export async function uploadFormData(values: FormData) {
       return { existing: existingTags, generated: generatedTags };
     }),
     expiresAt: z
-      .union([z.date(), z.null(), z.literal(''), z.string().datetime()])
+      .union([z.date(), z.null(), z.literal(''), z.iso.datetime()])
       .transform(val => {
         if (val === '') return null;
         if (typeof val === 'string') return new Date(val);

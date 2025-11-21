@@ -34,7 +34,7 @@ const schema = z.object({
   description: z
     .string()
     .max(512, 'Description cannot be more than 512 characters'),
-  expiryDate: z.union([z.date(), z.string().datetime(), z.null()]),
+  expiryDate: z.union([z.date(), z.iso.datetime(), z.null()]),
 });
 
 export function Form(props: Props) {

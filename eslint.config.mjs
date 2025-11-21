@@ -93,6 +93,7 @@ export default defineConfig(
       'react/jsx-uses-react': 'off',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-deprecated': 'error',
     },
   },
   eslintPluginPrettier,
