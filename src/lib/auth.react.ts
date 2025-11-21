@@ -1,13 +1,20 @@
-import type { DefaultSession } from 'next-auth';
-import { getSession as getAuthSession } from 'next-auth/react';
+import { User } from 'better-auth';
+import {
+  credentialsClient,
+  defaultCredentialsSchema,
+} from 'better-auth-credentials-plugin';
+import { createAuthClient } from 'better-auth/react';
 
-export { signIn, signOut } from 'next-auth/react';
+export type Session = typeof authClient.$Infer.Session;
 
-interface Session extends DefaultSession {
-  user?: DefaultSession['user'] & {
-    id: string;
-  };
-}
+export const authClient = createAuthClient({
+  plugins: [
+    credentialsClient<
+      User,
+      '/sign-in/credentials',
+      typeof defaultCredentialsSchema
+    >(),
+  ],
+});
 
-// @ts-expect-error Hacking the type so we don't have to do the module augmentation technique.
-export const getSession: () => Promise<Session | null> = getAuthSession;
+export const { signIn, signOut, useSession, getSession } = authClient;

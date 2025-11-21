@@ -1,4 +1,5 @@
 import { Center, Code, Container, Stack, Text, Title } from '@mantine/core';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { auth } from '~/lib/auth';
@@ -14,7 +15,9 @@ const Page = async (props: Props) => {
   const { searchParams } = props;
   const { next: nextPage = '/files' } = searchParams;
 
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
 
   if (session) {
     redirect(nextPage);

@@ -27,9 +27,10 @@ export const SignInForm = (props: Props) => {
     setloading(true);
     setError(null);
 
-    const { passkey } = values;
-
-    const res = await signIn('credentials', { passkey, redirect: false });
+    const res = await signIn.email({
+      email: 'test@test.com',
+      password: values.passkey,
+    });
 
     setloading(false);
 
@@ -39,8 +40,8 @@ export const SignInForm = (props: Props) => {
       return;
     }
 
-    if (res?.error === 'CredentialsSignin') {
-      form.setErrors({ passkey: 'Invalid passkey' });
+    if (res?.error.message === 'CredentialsSignin') {
+      form.setErrors({ passkey: 'Invalid password' });
       return;
     }
 

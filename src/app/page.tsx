@@ -13,6 +13,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconCircleCheck, IconHourglass } from '@tabler/icons-react';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 
 import classes from '~/app/page.module.css';
@@ -41,7 +42,9 @@ function OngoingIcon() {
 }
 
 export default async function Page() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
 
   return (
     <Center h="100%">

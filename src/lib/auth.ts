@@ -1,28 +1,26 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { betterAuth } from 'better-auth';
+import { credentials } from 'better-auth-credentials-plugin';
+
+import 'better-auth/plugins';
 
 import env from '~/env/index';
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
-  pages: {
-    signIn: '/auth/signin',
+export type Session = typeof auth.$Infer.Session;
+
+export const auth = betterAuth({
+  secret: env.BETTER_AUTH_SECRET,
+  emailAndPassword: {
+    enabled: false,
   },
-  secret: env.NEXT_AUTH_SECRET,
-  providers: [
-    CredentialsProvider({
-      name: 'Passkey',
-      credentials: {
-        passkey: { label: 'Passkey', type: 'passkey' },
-      },
-      authorize({ passkey }) {
-        if (passkey === env.PASSWORD) {
+  plugins: [
+    credentials({
+      autoSignUp: true,
+      async callback(_, parsed) {
+        if (parsed.password === env.PASSWORD) {
           return { id: '1', name: 'Admin', email: '', image: '' };
         }
 
-        return null;
+        throw new Error('CredentialsSignin');
       },
     }),
   ],

@@ -14,7 +14,8 @@ const env = createEnv({
     DATABASE_URL: z.string(),
     DATABASE_TOKEN: z.string(),
 
-    NEXT_AUTH_SECRET: z.string().default('secret'),
+    BETTER_AUTH_SECRET: z.string(),
+    BETTER_AUTH_URL: z.url().default('http://localhost:3000'),
 
     CRON_SECRET: z.string().default('secret'),
 
