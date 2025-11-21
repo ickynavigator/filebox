@@ -22,6 +22,7 @@ import { IFile } from '~/types';
 
 const s3Client = new S3Client({
   region: env.S3_REGION,
+  endpoint: env.S3_BUCKET_URL,
   credentials: {
     accessKeyId: env.S3_ACCESS_KEY_ID,
     secretAccessKey: env.S3_SECRET_ACCESS_KEY,
