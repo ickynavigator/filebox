@@ -1,4 +1,5 @@
 import { createTheme } from '@mantine/core';
+
 import { bricolage } from '~/lib/font';
 
 const theme = createTheme({

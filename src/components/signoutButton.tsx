@@ -1,5 +1,6 @@
-import { auth } from '~/lib/auth';
 import { Suspense } from 'react';
+
+import { auth } from '~/lib/auth';
 import { InnerSignoutButton } from './signoutButton.client';
 
 export const SignoutButton = async () => {

@@ -1,6 +1,6 @@
 import { defineConfig } from 'drizzle-kit';
 
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 
 export default defineConfig({
   dialect: 'turso',

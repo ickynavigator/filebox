@@ -1,4 +1,7 @@
-module.exports = {
+// @ts-check
+
+/** @type {import('postcss-load-config').Config} */
+const config = {
   plugins: {
     'postcss-preset-mantine': {},
     'postcss-simple-vars': {
@@ -12,3 +15,5 @@ module.exports = {
     },
   },
 };
+
+export default config;

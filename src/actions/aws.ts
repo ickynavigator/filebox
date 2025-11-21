@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 import * as fileActions from '~/actions/files';
 import { createBatchTags } from '~/actions/tags';
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 import {
   TAG_INPUT_DIVIDER,
   TAG_INPUT_GENERATED_PREFIX,

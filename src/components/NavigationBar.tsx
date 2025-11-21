@@ -1,9 +1,10 @@
 import { Anchor, Box, Container, Group } from '@mantine/core';
+
 import ColorSchemeToggle from './colorSchemeToggle';
-import { SignoutButton } from './signoutButton';
 import FileBoxLogo from './fileBoxLogo';
 import NavigationButton from './NavigationButton';
 import NavigationDrawer from './navigationDrawer';
+import { SignoutButton } from './signoutButton';
 
 export const NavigationBar = async () => (
   <Box component="header" h={56} style={{ height: '100%' }}>

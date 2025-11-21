@@ -3,10 +3,11 @@
 import { Alert, Button, Paper, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { signIn } from '~/lib/auth.react';
-import React, { useState } from 'react';
-import { Notifications } from '~/lib/notifications';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { signIn } from '~/lib/auth.react';
+import { Notifications } from '~/lib/notifications';
 
 interface Props {
   nextPage: string;

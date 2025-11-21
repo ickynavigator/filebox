@@ -1,4 +1,4 @@
-import { Box, Group, Text, rem } from '@mantine/core';
+import { Box, Group, rem, Text } from '@mantine/core';
 import {
   Dropzone,
   DropzoneAccept,
@@ -9,6 +9,7 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import React from 'react';
 import { ErrorCode } from 'react-dropzone';
+
 import { Notifications as message } from '~/lib/notifications';
 import { bytesToMegaBytes as bytesToMB } from '~/lib/utils';
 

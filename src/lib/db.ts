@@ -2,7 +2,7 @@ import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 import { createSingleton } from '~/lib/utils';
 
 function createDb() {

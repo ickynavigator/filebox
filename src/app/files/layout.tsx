@@ -1,5 +1,6 @@
 import { AppShell, AppShellHeader, AppShellMain } from '@mantine/core';
 import React from 'react';
+
 import { NavigationBar } from '~/components/NavigationBar';
 
 interface Props {

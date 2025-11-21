@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 import { deleteFile } from '~/actions/aws';
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 import db from '~/lib/db';
 
 export async function GET(request: NextRequest) {

@@ -1,4 +1,4 @@
-import { ActionIcon, CopyButton, Tooltip, rem } from '@mantine/core';
+import { ActionIcon, CopyButton, rem, Tooltip } from '@mantine/core';
 import { IconCheck, IconCopy } from '@tabler/icons-react';
 
 interface Props {

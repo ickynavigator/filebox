@@ -1,22 +1,23 @@
 import {
-  Image,
-  Container,
-  Title,
-  Button,
-  Group,
-  Text,
-  List,
-  ThemeIcon,
-  rem,
-  ListItem,
-  Center,
   Box,
+  Button,
+  Center,
+  Container,
+  Group,
+  Image,
+  List,
+  ListItem,
+  rem,
+  Text,
+  ThemeIcon,
+  Title,
 } from '@mantine/core';
 import { IconCircleCheck, IconHourglass } from '@tabler/icons-react';
 import Link from 'next/link';
+
+import classes from '~/app/page.module.css';
 import ColorSchemeToggle from '~/components/colorSchemeToggle';
 import { auth } from '~/lib/auth';
-import classes from '~/app/page.module.css';
 
 const iconProps = {
   style: { width: rem(15), height: rem(15) },

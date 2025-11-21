@@ -7,9 +7,10 @@ import '~/styles/globals.css';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Analytics } from '@vercel/analytics/react';
+import type { Metadata } from 'next';
+
 import { bricolage } from '~/lib/font';
 import theme from '~/lib/mantine';
-import type { Metadata } from 'next';
 
 interface Props {
   children: React.ReactNode;

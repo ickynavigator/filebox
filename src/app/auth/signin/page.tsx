@@ -1,6 +1,7 @@
 import { Center, Code, Container, Stack, Text, Title } from '@mantine/core';
-import { auth } from '~/lib/auth';
 import { redirect } from 'next/navigation';
+
+import { auth } from '~/lib/auth';
 import { SignInForm } from './_form';
 
 interface Props {

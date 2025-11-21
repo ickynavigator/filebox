@@ -5,11 +5,12 @@ import {
   Divider,
   Drawer,
   Group,
+  rem,
   ScrollArea,
   Stack,
-  rem,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+
 import ColorSchemeToggle from './colorSchemeToggle';
 import FileBoxLogo from './fileBoxLogo';
 import NavigationButton from './NavigationButton';

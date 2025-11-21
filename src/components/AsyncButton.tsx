@@ -2,6 +2,7 @@
 
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { useState } from 'react';
+
 import { Notifications } from '~/lib/notifications';
 
 interface IAsyncButton {
@@ -32,7 +33,7 @@ const AsyncButton = (props: IAsyncButton) => {
               await action();
               setLoading(false);
               onSuccess?.();
-            } catch (error) {
+            } catch {
               Notifications.error('An error occurred. Please try again.');
             }
           })

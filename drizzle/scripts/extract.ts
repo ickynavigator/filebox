@@ -4,7 +4,7 @@ import { asc } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 
 const libsql = createClient({
   url: env.DATABASE_URL,

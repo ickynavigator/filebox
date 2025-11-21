@@ -2,8 +2,8 @@
 
 import { ActionIcon } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
+
 import { signOut } from '~/lib/auth.react';
-import React from 'react';
 
 export const InnerSignoutButton = () => {
   const handleSignOut = async () => {

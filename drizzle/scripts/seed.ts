@@ -5,7 +5,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod/v4';
 
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index.mjs';
+import env from '~/env/index';
 
 const libsql = createClient({
   url: env.DATABASE_URL,
