@@ -7,6 +7,7 @@ const env = createEnv({
     S3_SECRET_ACCESS_KEY: z.string(),
     S3_BUCKET_NAME: z.string(),
     S3_REGION: z.string().default('auto'),
+    S3_BUCKET_URL: z.string().url(),
 
     PASSWORD: z.string().default('password'),
 
@@ -21,12 +22,7 @@ const env = createEnv({
       .enum(['development', 'production', 'test'])
       .default('development'),
   },
-  client: {
-    NEXT_PUBLIC_BUCKET_URL: z.string(),
-  },
-  experimental__runtimeEnv: {
-    NEXT_PUBLIC_BUCKET_URL: process.env.NEXT_PUBLIC_BUCKET_URL,
-  },
+  experimental__runtimeEnv: {},
 });
 
 export default env;

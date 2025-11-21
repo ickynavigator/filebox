@@ -106,11 +106,11 @@ export async function uploadFormData(values: FormData) {
     {
       name,
       description,
-      url: `${env.NEXT_PUBLIC_BUCKET_URL}${name}`,
+      url: new URL(name, env.S3_BUCKET_URL).toString(),
       size: fileToUpload.size,
       expiresAt,
     },
-    env.NEXT_PUBLIC_BUCKET_URL,
+    env.S3_BUCKET_URL,
     fileTags,
   );
 

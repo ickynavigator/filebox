@@ -75,7 +75,7 @@ export const getFilesCached = cache(getFiles, ['FILE_LIST'], {
 
 export async function createFile(
   file: typeof schema.ifile.$inferInsert,
-  baseURL: string,
+  baseURL: string | URL,
   tags: string[] = [],
 ) {
   const res = await db.transaction(async client => {
@@ -93,7 +93,7 @@ export async function createFile(
 
     await client
       .update(schema.ifile)
-      .set({ url: `${baseURL}${created.id}` })
+      .set({ url: new URL(created.id, baseURL).toString() })
       .where(eq(schema.ifile.id, created.id));
 
     return created;
