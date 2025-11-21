@@ -10,7 +10,8 @@ import {
   TextInput,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useForm, zodResolver } from '@mantine/form';
+import { useForm } from '@mantine/form';
+import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { FormEvent, useState } from 'react';
 import { z } from 'zod';
 
@@ -43,7 +44,7 @@ export function Form(props: Props) {
 
   const form = useForm({
     initialValues: { name: '', description: '', expiryDate: null },
-    validate: zodResolver(schema),
+    validate: zod4Resolver(schema),
   });
 
   const onDrop = (fileList: File[]) => {
