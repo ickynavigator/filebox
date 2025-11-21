@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Container,
   Group,
@@ -14,10 +13,9 @@ import {
 } from '@mantine/core';
 import { IconCircleCheck, IconHourglass } from '@tabler/icons-react';
 import { headers } from 'next/headers';
-import Link from 'next/link';
 
 import classes from '~/app/page.module.css';
-import ColorSchemeToggle from '~/components/colorSchemeToggle';
+import NavigationSection from '~/components/navigationSection.home';
 import { auth } from '~/lib/auth';
 
 const iconProps = {
@@ -84,42 +82,7 @@ export default async function Page() {
                 <b>Public Upload Endpoint</b> - Allow file uploads from anyone
               </ListItem>
             </List>
-            <Group mt={30}>
-              {session?.user != null ? (
-                <Button
-                  component={Link}
-                  href="/files"
-                  radius="xl"
-                  size="md"
-                  className={classes.control}
-                >
-                  View Files
-                </Button>
-              ) : (
-                <Button
-                  component={Link}
-                  href="/auth/signin"
-                  radius="xl"
-                  size="md"
-                  className={classes.control}
-                >
-                  Login
-                </Button>
-              )}
-
-              <Button
-                component={Link}
-                href="https://github.com/ickynavigator/filebox"
-                target="_blank"
-                variant="default"
-                radius="xl"
-                size="md"
-                className={classes.control}
-              >
-                Source code
-              </Button>
-              <ColorSchemeToggle />
-            </Group>
+            <NavigationSection isLoggedIn={session?.user != null} />
           </Box>
 
           <Image
