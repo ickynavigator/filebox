@@ -4,7 +4,11 @@ import '@mantine/dropzone/styles.css';
 import '@mantine/notifications/styles.css';
 import '~/styles/globals.css';
 
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import {
+  ColorSchemeScript,
+  mantineHtmlProps,
+  MantineProvider,
+} from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
@@ -52,7 +56,7 @@ export function generateMetadata(): Metadata {
 
 function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript />
       </head>
