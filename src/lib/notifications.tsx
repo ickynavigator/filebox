@@ -14,7 +14,7 @@ export const Notifications = {
       ...options,
       message,
       color: 'green',
-      icon: <IconCheck color="green" />,
+      icon: <IconCheck />,
     });
   },
   error: (message: ReactNode, options?: NotificationData) => {
@@ -22,7 +22,7 @@ export const Notifications = {
       ...options,
       message,
       color: 'red',
-      icon: <IconX color="red" />,
+      icon: <IconX />,
     });
   },
 };
