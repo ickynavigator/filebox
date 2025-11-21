@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import { relations, sql } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 import {
   index,
   integer,
@@ -18,10 +18,10 @@ export const ifile = sqliteTable('IFile', {
   url: text().notNull(),
   size: integer(),
   updatedAt: integer({ mode: 'timestamp' })
-    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => new Date())
     .notNull(),
   createdAt: integer({ mode: 'timestamp' })
-    .$defaultFn(() => sql`(CURRENT_TIMESTAMP)`)
+    .$defaultFn(() => new Date())
     .notNull(),
   expiresAt: integer({ mode: 'timestamp' }),
 });
@@ -33,10 +33,10 @@ export const tag = sqliteTable('Tag', {
     .$defaultFn(() => createId()),
   name: text().notNull(),
   updatedAt: integer({ mode: 'timestamp' })
-    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => new Date())
     .notNull(),
   createdAt: integer({ mode: 'timestamp' })
-    .$defaultFn(() => sql`(CURRENT_TIMESTAMP)`)
+    .$defaultFn(() => new Date())
     .notNull(),
 });
 
