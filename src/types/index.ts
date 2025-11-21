@@ -1,9 +1,11 @@
-import { IFile, Tag } from '@prisma/client';
+import type * as schema from '~/drizzle/schema';
 
-export type BaseFile = BetterOmit<IFile, 'id' | 'createdAt' | 'updatedAt'>;
+export type IFile = typeof schema.ifile.$inferSelect;
+export type Tag = typeof schema.tag.$inferSelect;
 
-export interface IFileReturn {
-  files: Array<IFile & { tags: Tag[] }>;
-  page?: number;
-  pages?: number;
-}
+export type IFileReturn = {
+  files: (IFile & { tags: Tag[] })[];
+} & (
+  | { noPaginate: false; page?: number; pages?: number }
+  | { noPaginate: true; page?: never; pages?: never }
+);

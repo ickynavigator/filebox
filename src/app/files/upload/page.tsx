@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import { getTagsCached } from '~/actions/tags';
 import { Form } from './_form';
 

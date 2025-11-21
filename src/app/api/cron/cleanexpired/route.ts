@@ -1,21 +1,21 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
+import { lte } from 'drizzle-orm';
 
-import type { NextRequest } from 'next/server';
 import { deleteFile } from '~/actions/aws';
-import env from '~/env/index.mjs';
-import prisma from '~/lib/prisma';
+import * as schema from '~/drizzle/schema';
+import env from '~/env/index';
+import db from '~/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
 
   if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const filesToDelete = await prisma.iFile.findMany({
-    where: { expiresAt: { lte: new Date() } },
-  });
+  const filesToDelete = await db
+    .select()
+    .from(schema.ifile)
+    .where(lte(schema.ifile.expiresAt, new Date()));
 
   if (filesToDelete.length <= 0) {
     return new Response('No files to delete', { status: 200 });
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       await deleteFile(file.id);
 
       deleteResponse.push({ id: file.id, status: 'success' });
-    } catch (e) {
+    } catch {
       deleteResponse.push({ id: file.id, status: 'error' });
     }
   }

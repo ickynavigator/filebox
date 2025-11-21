@@ -7,23 +7,25 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
+
 import * as fileActions from '~/actions/files';
-import env from '~/env/index.mjs';
+import { createBatchTags } from '~/actions/tags';
+import env from '~/env/index';
 import {
-  TAGS,
   TAG_INPUT_DIVIDER,
   TAG_INPUT_GENERATED_PREFIX,
+  TAGS,
 } from '~/lib/constants';
-import { revalidateTag } from 'next/cache';
-import type { IFile } from '@prisma/client';
-import { createBatchTags } from './tags';
+import { IFile } from '~/types';
 
 const s3Client = new S3Client({
-  region: env.AWS_REGION,
+  region: env.S3_REGION,
+  endpoint: env.S3_BUCKET_URL,
   credentials: {
-    accessKeyId: env.AWS_PERSONAL_ACCESS_KEY,
-    secretAccessKey: env.AWS_PERSONAL_SECRET_KEY,
+    accessKeyId: env.S3_ACCESS_KEY_ID,
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 });
 
@@ -47,7 +49,7 @@ async function createPresignedUrl(opts: PresignedURLClient) {
   }
 
   const command = new PutObjectCommand({
-    Bucket: env.AWS_BUCKET_NAME,
+    Bucket: env.S3_BUCKET_NAME,
     Key: key,
     ContentType: type,
     Metadata,
@@ -78,7 +80,7 @@ export async function uploadFormData(values: FormData) {
       return { existing: existingTags, generated: generatedTags };
     }),
     expiresAt: z
-      .union([z.date(), z.null(), z.literal(''), z.string().datetime()])
+      .union([z.date(), z.null(), z.literal(''), z.iso.datetime()])
       .transform(val => {
         if (val === '') return null;
         if (typeof val === 'string') return new Date(val);
@@ -105,11 +107,11 @@ export async function uploadFormData(values: FormData) {
     {
       name,
       description,
-      url: `${env.NEXT_PUBLIC_BUCKET_URL}${name}`,
+      url: new URL(name, env.S3_BUCKET_URL).toString(),
       size: fileToUpload.size,
       expiresAt,
     },
-    env.NEXT_PUBLIC_BUCKET_URL,
+    env.S3_BUCKET_URL,
     fileTags,
   );
 
@@ -134,11 +136,11 @@ export async function uploadFormData(values: FormData) {
 
 export async function deleteFile(Key: IFile['id']) {
   const command = new DeleteObjectCommand({
-    Bucket: env.AWS_BUCKET_NAME,
+    Bucket: env.S3_BUCKET_NAME,
     Key,
   });
   await s3Client.send(command);
   await fileActions.deleteFile(Key);
 
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 }

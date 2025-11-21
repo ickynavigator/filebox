@@ -1,8 +1,10 @@
-import prisma from '~/lib/prisma';
-import type { IFile } from '@prisma/client';
-import type { BaseFile, IFileReturn } from '~/types';
+import { count, eq, like, or } from 'drizzle-orm';
 import { unstable_cache as cache, revalidateTag } from 'next/cache';
+
+import * as schema from '~/drizzle/schema';
 import { TAGS } from '~/lib/constants';
+import db from '~/lib/db';
+import type { IFile, IFileReturn } from '~/types';
 
 interface GetFilesOptions {
   pageSize?: number;
@@ -11,56 +13,58 @@ interface GetFilesOptions {
   param?: string;
   keyword?: string | null;
 }
+
 async function getFiles(options: GetFilesOptions) {
   const {
     pageSize = 10,
     page = 1,
     noPaginate = false,
-    param = '',
     keyword = null,
   } = options;
 
-  type KeyWord = { [k: string]: { contains: string } };
-  const keywords: { OR?: KeyWord[] } = {};
+  const result: IFileReturn = { files: [], noPaginate };
 
-  if (keyword) {
-    const kwSearch = { contains: keyword };
+  let conditions = undefined;
 
-    keywords.OR = [
-      { id: kwSearch },
-      { name: kwSearch },
-      { description: kwSearch },
-      { url: kwSearch },
-    ];
+  if (keyword != null) {
+    const normalizedKeyword = `${keyword.toLocaleLowerCase()}`;
 
-    const specificQuery: { [k: string]: typeof kwSearch } = {};
-
-    if (param) {
-      specificQuery[param] = kwSearch;
-      keywords.OR.push({ ...specificQuery });
-    }
+    conditions = or(
+      like(schema.ifile.id, normalizedKeyword),
+      like(schema.ifile.name, normalizedKeyword),
+      like(schema.ifile.description, normalizedKeyword),
+      like(schema.ifile.url, normalizedKeyword),
+    );
   }
 
-  const result: IFileReturn = { files: [] };
+  let dirtyFiles;
 
   if (noPaginate) {
-    result.files = await prisma.iFile.findMany({
-      take: pageSize,
-      skip: pageSize * (page - 1),
-      where: { ...keywords },
-      include: { tags: true },
+    dirtyFiles = await db.query.ifile.findMany({
+      where: conditions,
+      with: { tags: { with: { tag: true } } },
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
     });
 
-    const count = await prisma.iFile.count({ where: { ...keywords } });
+    const [{ count: _count }] = await db
+      .select({ count: count() })
+      .from(schema.ifile)
+      .where(conditions);
 
     result.page = page;
-    result.pages = Math.ceil(count / pageSize);
+    result.pages = Math.ceil(_count / pageSize);
   } else {
-    result.files = await prisma.iFile.findMany({
-      where: { OR: keywords.OR },
-      include: { tags: true },
+    dirtyFiles = await db.query.ifile.findMany({
+      where: conditions,
+      with: { tags: { with: { tag: true } } },
     });
   }
+
+  result.files = dirtyFiles.map(file => ({
+    ...file,
+    tags: file.tags.map(tag => tag.tag),
+  }));
 
   return result;
 }
@@ -70,30 +74,46 @@ export const getFilesCached = cache(getFiles, ['FILE_LIST'], {
 });
 
 export async function createFile(
-  file: BaseFile,
-  baseURL: string,
+  file: typeof schema.ifile.$inferInsert,
+  baseURL: string | URL,
   tags: string[] = [],
 ) {
-  const createdFile = await prisma.iFile.create({
-    data: { ...file, tags: { connect: tags.map(tagId => ({ id: tagId })) } },
+  const res = await db.transaction(async client => {
+    const [created] = await client
+      .insert(schema.ifile)
+      .values(file)
+      .returning();
+
+    if (tags?.length) {
+      await client
+        .insert(schema.ifileToTag)
+        .values(tags.map(tagId => ({ a: created.id, b: tagId })))
+        .onConflictDoNothing();
+    }
+
+    await client
+      .update(schema.ifile)
+      .set({ url: new URL(created.id, baseURL).toString() })
+      .where(eq(schema.ifile.id, created.id));
+
+    return created;
   });
 
-  const res = prisma.iFile.update({
-    where: { id: createdFile.id },
-    data: { url: `${baseURL}${createdFile.id}` },
-  });
-
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 
   return res;
 }
 
 export async function deleteFile(id: IFile['id']) {
-  const file = await prisma.iFile.findUnique({ where: { id } });
+  const [file] = await db
+    .select()
+    .from(schema.ifile)
+    .where(eq(schema.ifile.id, id))
+    .limit(1);
 
   if (!file) throw new Error('File not found');
 
-  await prisma.iFile.delete({ where: { id } });
+  await db.delete(schema.ifile).where(eq(schema.ifile.id, id));
 
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 }

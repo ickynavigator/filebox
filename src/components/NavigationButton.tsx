@@ -3,6 +3,7 @@
 import { Button } from '@mantine/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import classes from '~/components/NavigationButton.module.css';
 
 interface NavigationButtonProps {

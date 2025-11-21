@@ -1,6 +1,6 @@
 import { Badge } from '@mantine/core';
-import { Tag } from '@prisma/client';
-import React from 'react';
+
+import type { Tag } from '~/types';
 
 interface Props {
   tag: Tag;

@@ -1,9 +1,13 @@
-import { auth } from '~/lib/auth';
+import { headers } from 'next/headers';
 import { Suspense } from 'react';
-import { InnerSignoutButton } from './signoutButton.client';
+
+import { InnerSignoutButton } from '~/components/signoutButton.client';
+import { auth } from '~/lib/auth';
 
 export const SignoutButton = async () => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return <Suspense>{session?.user ? <InnerSignoutButton /> : null}</Suspense>;
 };

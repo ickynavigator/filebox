@@ -1,22 +1,22 @@
 import {
-  Image,
-  Container,
-  Title,
-  Button,
-  Group,
-  Text,
-  List,
-  ThemeIcon,
-  rem,
-  ListItem,
-  Center,
   Box,
+  Center,
+  Container,
+  Group,
+  Image,
+  List,
+  ListItem,
+  rem,
+  Text,
+  ThemeIcon,
+  Title,
 } from '@mantine/core';
 import { IconCircleCheck, IconHourglass } from '@tabler/icons-react';
-import Link from 'next/link';
-import ColorSchemeToggle from '~/components/colorSchemeToggle';
-import { auth } from '~/lib/auth';
+import { headers } from 'next/headers';
+
 import classes from '~/app/page.module.css';
+import NavigationSection from '~/components/navigationSection.home';
+import { auth } from '~/lib/auth';
 
 const iconProps = {
   style: { width: rem(15), height: rem(15) },
@@ -40,7 +40,9 @@ function OngoingIcon() {
 }
 
 export default async function Page() {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <Center h="100%">
@@ -80,42 +82,7 @@ export default async function Page() {
                 <b>Public Upload Endpoint</b> - Allow file uploads from anyone
               </ListItem>
             </List>
-            <Group mt={30}>
-              {session?.user != null ? (
-                <Button
-                  component={Link}
-                  href="/files"
-                  radius="xl"
-                  size="md"
-                  className={classes.control}
-                >
-                  View Files
-                </Button>
-              ) : (
-                <Button
-                  component={Link}
-                  href="/auth/signin"
-                  radius="xl"
-                  size="md"
-                  className={classes.control}
-                >
-                  Login
-                </Button>
-              )}
-
-              <Button
-                component={Link}
-                href="https://github.com/ickynavigator/filebox"
-                target="_blank"
-                variant="default"
-                radius="xl"
-                size="md"
-                className={classes.control}
-              >
-                Source code
-              </Button>
-              <ColorSchemeToggle />
-            </Group>
+            <NavigationSection isLoggedIn={session?.user != null} />
           </Box>
 
           <Image

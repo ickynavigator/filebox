@@ -1,14 +1,10 @@
 import { NextRequest } from 'next/server';
 
-interface RouteParams {
-  params: {
-    filepath: string;
-  };
-}
-
-export async function GET(request: NextRequest, opts: RouteParams) {
-  const { params } = opts;
-  const { filepath } = params;
+export async function GET(
+  request: NextRequest,
+  ctx: RouteContext<'/api/download/[filepath]'>,
+) {
+  const { filepath } = await ctx.params;
 
   const { searchParams } = request.nextUrl;
 

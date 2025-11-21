@@ -16,12 +16,15 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
     "paths": {
       "~/*": [
         "./src/*"
+      ],
+      "~/drizzle/*": [
+        "./drizzle/*"
       ]
     },
     "plugins": [
@@ -35,14 +38,13 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next.config.mjs"
+    "next.config.mjs",
+    "eslint.config.mjs",
+    "prettier.config.mjs",
+    "postcss.config.mjs",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
   ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
 }

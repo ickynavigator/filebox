@@ -1,4 +1,4 @@
-import { Text, rem } from '@mantine/core';
+import { rem, Text } from '@mantine/core';
 import { useId } from '@mantine/hooks';
 import React from 'react';
 

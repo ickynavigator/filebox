@@ -1,7 +1,8 @@
 'use client';
 
 import { ActionIcon, Tooltip } from '@mantine/core';
-import { useState } from 'react';
+import { useTransition } from 'react';
+
 import { Notifications } from '~/lib/notifications';
 
 interface IAsyncButton {
@@ -16,7 +17,20 @@ interface IAsyncButton {
 
 const AsyncButton = (props: IAsyncButton) => {
   const { label, color, action, Icon, buttonProps, onSuccess } = props;
-  const [loading, setLoading] = useState(false);
+  const [loading, startTransition] = useTransition();
+
+  const handleClick = () => {
+    if (!action) return;
+
+    startTransition(async () => {
+      try {
+        await action();
+        onSuccess?.();
+      } catch {
+        Notifications.error('An error occurred. Please try again.');
+      }
+    });
+  };
 
   return (
     <Tooltip label={label} withArrow color={color}>
@@ -24,19 +38,7 @@ const AsyncButton = (props: IAsyncButton) => {
         variant="outline"
         color={color}
         loading={loading}
-        onClick={
-          action &&
-          (async () => {
-            try {
-              setLoading(true);
-              await action();
-              setLoading(false);
-              onSuccess?.();
-            } catch (error) {
-              Notifications.error('An error occurred. Please try again.');
-            }
-          })
-        }
+        onClick={handleClick}
         {...buttonProps}
       >
         {Icon}

@@ -1,4 +1,4 @@
-import { Box, Group, Text, rem } from '@mantine/core';
+import { Box, Group, rem, Text } from '@mantine/core';
 import {
   Dropzone,
   DropzoneAccept,
@@ -9,6 +9,7 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import React from 'react';
 import { ErrorCode } from 'react-dropzone';
+
 import { Notifications as message } from '~/lib/notifications';
 import { bytesToMegaBytes as bytesToMB } from '~/lib/utils';
 
@@ -50,7 +51,7 @@ export function FileUpload({
 }: FileUploadProps) {
   /** Handles file dropping */
   function handleFileDrop(fileList: File[]) {
-    fileList.forEach(async curr => {
+    fileList.forEach(curr => {
       if (!curr) {
         message.error('No file selected');
       } else {
@@ -88,11 +89,11 @@ export function FileUpload({
       let errStr = `For ${file.name}:`;
 
       errors.forEach(err => {
-        if (err.code === ErrorCode.FileTooLarge) {
+        if (err.code === ErrorCode.FileTooLarge.toString()) {
           errStr += ' File is too big. Max file size is 5MB.';
         }
 
-        if (err.code === ErrorCode.FileInvalidType) {
+        if (err.code === ErrorCode.FileInvalidType.toString()) {
           errStr += ' - File type not allowed.';
         }
       });
@@ -136,7 +137,7 @@ export function FileUpload({
               {`Files should not exceed ${bytesToMB(MAX_FILE_SIZE, false)}mb`}
             </Text>
           )}
-          {children || null}
+          {children ?? null}
         </Box>
       </Group>
     </Dropzone>

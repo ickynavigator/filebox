@@ -1,6 +1,7 @@
 import { Alert, Container, Group, ScrollArea, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { Metadata } from 'next';
+
 import { deleteFile } from '~/actions/aws';
 import { getFilesCached } from '~/actions/files';
 import { getTagsCached } from '~/actions/tags';
@@ -11,13 +12,13 @@ export const metadata: Metadata = {
   title: 'List files',
 };
 
-interface PageProps {
-  searchParams: { search?: string };
+interface PageContext {
+  searchParams: Promise<{ search?: string }>;
 }
 
-async function Page(props: PageProps) {
+async function Page(props: PageProps<'/files'> & PageContext) {
   const { searchParams } = props;
-  const { search } = searchParams;
+  const { search } = await searchParams;
 
   const { files } = await getFilesCached({ keyword: search ?? null });
 

@@ -2,11 +2,12 @@
 
 import {
   ActionIcon,
-  useMantineColorScheme,
   useComputedColorScheme,
+  useMantineColorScheme,
 } from '@mantine/core';
-import { IconSun, IconMoon } from '@tabler/icons-react';
+import { IconMoon, IconSun } from '@tabler/icons-react';
 import cx from 'clsx';
+
 import classes from './colorSchemeToggle.module.css';
 
 const ColorSchemeToggle = () => {

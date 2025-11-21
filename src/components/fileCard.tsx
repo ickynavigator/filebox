@@ -5,27 +5,26 @@ import {
   ActionIconGroup,
   Card,
   Group,
+  rem,
   ScrollArea,
   Stack,
   Text,
   Title,
   Tooltip,
-  rem,
 } from '@mantine/core';
-import React from 'react';
-import type { IFile } from '@prisma/client';
 import { IconDownload, IconEye, IconX } from '@tabler/icons-react';
-import { Notifications } from '~/lib/notifications';
-import { useRouter } from 'next/navigation';
-import { bytesToMegaBytes } from '~/lib/utils';
-import type { IFileReturn } from '~/types';
-import { timeFromNow } from '~/lib/dateTime';
 import cx from 'clsx';
-import AsyncButton from './AsyncButton';
-import ClipboardButton from './copyButton';
-import CustomPill from './customPill';
-import classes from './fileCard.module.css';
-import ElementJoin from './elementJoin';
+import { useRouter } from 'next/navigation';
+
+import AsyncButton from '~/components/AsyncButton';
+import ClipboardButton from '~/components/copyButton';
+import CustomPill from '~/components/customPill';
+import ElementJoin from '~/components/elementJoin';
+import classes from '~/components/fileCard.module.css';
+import { timeFromNow } from '~/lib/dateTime';
+import { Notifications } from '~/lib/notifications';
+import { bytesToMegaBytes } from '~/lib/utils';
+import type { IFile, IFileReturn } from '~/types';
 
 interface Props {
   file: IFileReturn['files'][number];
@@ -72,7 +71,7 @@ export const FileCard = (props: Props) => {
         </Text>
 
         <Text size="sm" lh={1.5} c="dimmed" style={{ whiteSpace: 'pre-wrap' }}>
-          {file.description || 'No description'}
+          {file.description ?? 'No description'}
         </Text>
 
         {file.tags.length > 0 ? (

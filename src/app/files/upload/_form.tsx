@@ -6,19 +6,21 @@ import {
   Group,
   Stack,
   Text,
-  TextInput,
   Textarea,
+  TextInput,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useForm, zodResolver } from '@mantine/form';
-import { Tag } from '@prisma/client';
+import { useForm } from '@mantine/form';
+import { zod4Resolver } from 'mantine-form-zod-resolver';
 import { FormEvent, useState } from 'react';
 import { z } from 'zod';
+
 import { uploadFormData } from '~/actions/aws';
-import { FileUpload, type FileInterface } from '~/components/FileUpload';
 import CustomTagInput from '~/components/customTagInput';
+import { FileUpload, type FileInterface } from '~/components/FileUpload';
 import { MAX_UPLOAD_FILE_SIZE } from '~/lib/constants';
 import { Notifications } from '~/lib/notifications';
+import type { Tag } from '~/types';
 
 interface Props {
   tags?: Tag[];
@@ -32,7 +34,7 @@ const schema = z.object({
   description: z
     .string()
     .max(512, 'Description cannot be more than 512 characters'),
-  expiryDate: z.union([z.date(), z.string().datetime(), z.null()]),
+  expiryDate: z.union([z.date(), z.iso.datetime(), z.null()]),
 });
 
 export function Form(props: Props) {
@@ -42,7 +44,7 @@ export function Form(props: Props) {
 
   const form = useForm({
     initialValues: { name: '', description: '', expiryDate: null },
-    validate: zodResolver(schema),
+    validate: zod4Resolver(schema),
   });
 
   const onDrop = (fileList: File[]) => {

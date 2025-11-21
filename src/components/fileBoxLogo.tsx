@@ -1,6 +1,5 @@
 import { Group, ThemeIcon, Title } from '@mantine/core';
 import { IconBox } from '@tabler/icons-react';
-import React from 'react';
 
 export default function FileBoxLogo() {
   return (

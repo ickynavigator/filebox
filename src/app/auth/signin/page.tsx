@@ -1,19 +1,21 @@
 import { Center, Code, Container, Stack, Text, Title } from '@mantine/core';
-import { auth } from '~/lib/auth';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+import { auth } from '~/lib/auth';
 import { SignInForm } from './_form';
 
-interface Props {
-  searchParams: {
-    next?: string;
-  };
+interface PageContext {
+  searchParams: Promise<{ next?: string }>;
 }
 
-const Page = async (props: Props) => {
+const Page = async (props: PageProps<'/auth/signin'> & PageContext) => {
   const { searchParams } = props;
-  const { next: nextPage = '/files' } = searchParams;
+  const { next: nextPage = '/files' } = await searchParams;
 
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (session) {
     redirect(nextPage);
