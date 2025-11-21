@@ -40,7 +40,7 @@ export const SignInForm = (props: Props) => {
       return;
     }
 
-    if (res?.error.message === 'CredentialsSignin') {
+    if (res?.error.code === 'INVALID_CREDENTIALS') {
       form.setErrors({ passkey: 'Invalid password' });
       return;
     }
