@@ -3,12 +3,12 @@ import { z } from 'zod';
 
 const env = createEnv({
   server: {
-    AWS_PERSONAL_ACCESS_KEY: z.string(),
-    AWS_BUCKET_NAME: z.string(),
-    AWS_REGION: z.string(),
-    AWS_PERSONAL_SECRET_KEY: z.string(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
+    S3_BUCKET_NAME: z.string(),
+    S3_REGION: z.string().default('auto'),
 
-    PASSWORD: z.string(),
+    PASSWORD: z.string().default('password'),
 
     DATABASE_URL: z.string(),
     DATABASE_TOKEN: z.string(),

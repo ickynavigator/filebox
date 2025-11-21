@@ -21,10 +21,10 @@ import {
 import { IFile } from '~/types';
 
 const s3Client = new S3Client({
-  region: env.AWS_REGION,
+  region: env.S3_REGION,
   credentials: {
-    accessKeyId: env.AWS_PERSONAL_ACCESS_KEY,
-    secretAccessKey: env.AWS_PERSONAL_SECRET_KEY,
+    accessKeyId: env.S3_ACCESS_KEY_ID,
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 });
 
@@ -48,7 +48,7 @@ async function createPresignedUrl(opts: PresignedURLClient) {
   }
 
   const command = new PutObjectCommand({
-    Bucket: env.AWS_BUCKET_NAME,
+    Bucket: env.S3_BUCKET_NAME,
     Key: key,
     ContentType: type,
     Metadata,
@@ -135,7 +135,7 @@ export async function uploadFormData(values: FormData) {
 
 export async function deleteFile(Key: IFile['id']) {
   const command = new DeleteObjectCommand({
-    Bucket: env.AWS_BUCKET_NAME,
+    Bucket: env.S3_BUCKET_NAME,
     Key,
   });
   await s3Client.send(command);
