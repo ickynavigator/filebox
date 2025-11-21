@@ -15,7 +15,7 @@ export const auth = betterAuth({
   plugins: [
     credentials({
       autoSignUp: true,
-      async callback(_, parsed) {
+      callback(_, parsed) {
         if (parsed.password === env.PASSWORD) {
           return { id: '1', name: 'Admin', email: '', image: '' };
         }

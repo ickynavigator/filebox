@@ -13,7 +13,7 @@ interface GetTagsOpts {
 }
 
 async function getTags(opts?: GetTagsOpts) {
-  const { query } = opts || {};
+  const { query } = opts ?? {};
 
   return db
     .select()

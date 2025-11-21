@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     {
       baseURL: request.nextUrl.origin,
       headers: {
-        cookie: request.headers.get('cookie') || '',
+        cookie: request.headers.get('cookie') ?? '',
       },
     },
   );

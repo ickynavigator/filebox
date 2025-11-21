@@ -71,7 +71,7 @@ export const FileCard = (props: Props) => {
         </Text>
 
         <Text size="sm" lh={1.5} c="dimmed" style={{ whiteSpace: 'pre-wrap' }}>
-          {file.description || 'No description'}
+          {file.description ?? 'No description'}
         </Text>
 
         {file.tags.length > 0 ? (

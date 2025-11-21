@@ -12,5 +12,5 @@ export function createSingleton<T>(name: string, create: () => T): T {
     g[s] = scope;
   }
 
-  return scope as T;
+  return scope;
 }

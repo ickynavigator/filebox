@@ -15,7 +15,7 @@ async function main() {
   const path = './files.json';
 
   if (fs.existsSync(path)) {
-    const input = await import(path);
+    const input: unknown = await import(path);
     const { files } = insertSchema.parse(input);
     const response = await db.insert(schema.ifile).values(files);
     // eslint-disable-next-line no-console

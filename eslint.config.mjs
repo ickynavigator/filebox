@@ -70,14 +70,14 @@ export default defineConfig(
     },
   },
   eslintPluginJs.configs.recommended,
-  eslintPluginTs.configs.recommended,
-  eslintPluginTs.configs.stylistic,
+  eslintPluginTs.configs.recommendedTypeChecked,
+  eslintPluginTs.configs.stylisticTypeChecked,
   eslintPluginReact.configs.flat.recommended,
   eslintPluginReact.configs.flat['jsx-runtime'],
   eslintPluginReactHooks.configs.flat.recommended,
   eslintPluginUnusedImports.configs.recommended,
   eslintPluginNext.configs['core-web-vitals'],
-  eslintPluginNext.configs['recommended'],
+  eslintPluginNext.configs.recommended,
   {
     name: `${HEADER}`,
     rules: {
