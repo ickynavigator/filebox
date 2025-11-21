@@ -18,11 +18,12 @@ import {
   ThemeIcon,
   useCombobox,
 } from '@mantine/core';
-import type { Tag } from '@prisma/client';
-import React, { useMemo, useState } from 'react';
-import { TAG_INPUT_DIVIDER, TAG_INPUT_GENERATED_PREFIX } from '~/lib/constants';
 import { IconSparkles } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
+
 import classes from '~/components/customTagInput.module.css';
+import { TAG_INPUT_DIVIDER, TAG_INPUT_GENERATED_PREFIX } from '~/lib/constants';
+import type { Tag } from '~/types';
 
 interface Props {
   tags?: Tag[];
@@ -34,7 +35,7 @@ const CREATE = '$create';
 const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
   const findTag = (id: Tag['id']) => data.find(tag => tag.id === id);
 
-  return (id: Tag['id']) => {
+  function _Pill(id: Tag['id']) {
     const tag = findTag(id);
 
     if (!tag) {
@@ -57,7 +58,9 @@ const ValuePill = (data: Tag[], removeCB: (id: Tag['id']) => void) => {
         {tag.name}
       </Pill>
     );
-  };
+  }
+
+  return _Pill;
 };
 
 export default function CustomTagInput(props: Props) {

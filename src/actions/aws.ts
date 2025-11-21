@@ -7,17 +7,18 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
+
 import * as fileActions from '~/actions/files';
+import { createBatchTags } from '~/actions/tags';
 import env from '~/env/index.mjs';
 import {
-  TAGS,
   TAG_INPUT_DIVIDER,
   TAG_INPUT_GENERATED_PREFIX,
+  TAGS,
 } from '~/lib/constants';
-import { revalidateTag } from 'next/cache';
-import type { IFile } from '@prisma/client';
-import { createBatchTags } from './tags';
+import { IFile } from '~/types';
 
 const s3Client = new S3Client({
   region: env.AWS_REGION,

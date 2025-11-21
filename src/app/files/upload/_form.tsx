@@ -6,19 +6,20 @@ import {
   Group,
   Stack,
   Text,
-  TextInput,
   Textarea,
+  TextInput,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm, zodResolver } from '@mantine/form';
-import { Tag } from '@prisma/client';
 import { FormEvent, useState } from 'react';
 import { z } from 'zod';
+
 import { uploadFormData } from '~/actions/aws';
-import { FileUpload, type FileInterface } from '~/components/FileUpload';
 import CustomTagInput from '~/components/customTagInput';
+import { FileUpload, type FileInterface } from '~/components/FileUpload';
 import { MAX_UPLOAD_FILE_SIZE } from '~/lib/constants';
 import { Notifications } from '~/lib/notifications';
+import type { Tag } from '~/types';
 
 interface Props {
   tags?: Tag[];
