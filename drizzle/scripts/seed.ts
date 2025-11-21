@@ -1,17 +1,11 @@
 import fs from 'fs';
-import { createClient } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/libsql';
 import { createInsertSchema } from 'drizzle-zod';
 import z from 'zod/v4';
 
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index';
+import { createDb } from '../client';
 
-const libsql = createClient({
-  url: env.DATABASE_URL,
-  authToken: env.DATABASE_TOKEN,
-});
-const db = drizzle(libsql, { schema });
+const db = createDb();
 
 async function main() {
   const insertSchema = z.object({

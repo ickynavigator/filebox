@@ -1,16 +1,10 @@
 import fs from 'fs';
-import { createClient } from '@libsql/client';
 import { asc } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/libsql';
 
 import * as schema from '~/drizzle/schema';
-import env from '~/env/index';
+import { createDb } from '../client';
 
-const libsql = createClient({
-  url: env.DATABASE_URL,
-  authToken: env.DATABASE_TOKEN,
-});
-const db = drizzle(libsql, { schema });
+const db = createDb();
 
 async function main() {
   const files = await db
