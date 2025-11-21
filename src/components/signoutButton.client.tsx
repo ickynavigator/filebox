@@ -4,14 +4,14 @@ import { ActionIcon } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
 import { useTransition } from 'react';
 
-import { signOut } from '~/lib/auth.react';
+import { authClient } from '~/lib/auth.react';
 
 export const InnerSignoutButton = () => {
   const [loading, startTransition] = useTransition();
 
   const handleSignOut = () => {
     startTransition(async () => {
-      await signOut();
+      await authClient.signOut();
     });
   };
 

@@ -6,7 +6,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { signIn } from '~/lib/auth.react';
+import { authClient } from '~/lib/auth.react';
 import { Notifications } from '~/lib/notifications';
 
 interface Props {
@@ -27,7 +27,7 @@ export const SignInForm = (props: Props) => {
     setloading(true);
     setError(null);
 
-    const res = await signIn.email({
+    const res = await authClient.signIn.credentials({
       email: 'test@test.com',
       password: values.passkey,
     });
