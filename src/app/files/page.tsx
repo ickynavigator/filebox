@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   title: 'List files',
 };
 
-interface PageProps {
-  searchParams: { search?: string };
+interface PageContext {
+  searchParams: Promise<{ search?: string }>;
 }
 
-async function Page(props: PageProps) {
+async function Page(props: PageProps<'/files'> & PageContext) {
   const { searchParams } = props;
-  const { search } = searchParams;
+  const { search } = await searchParams;
 
   const { files } = await getFilesCached({ keyword: search ?? null });
 

@@ -141,5 +141,5 @@ export async function deleteFile(Key: IFile['id']) {
   await s3Client.send(command);
   await fileActions.deleteFile(Key);
 
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 }

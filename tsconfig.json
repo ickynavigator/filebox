@@ -16,7 +16,7 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
     "paths": {
@@ -41,7 +41,8 @@
     "next.config.mjs",
     "eslint.config.mjs",
     "prettier.config.mjs",
-    "postcss.config.mjs"
+    "postcss.config.mjs",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

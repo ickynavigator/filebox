@@ -1,12 +1,11 @@
 import { lte } from 'drizzle-orm';
-import type { NextRequest } from 'next/server';
 
 import { deleteFile } from '~/actions/aws';
 import * as schema from '~/drizzle/schema';
 import env from '~/env/index';
 import db from '~/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
 
   if (authHeader !== `Bearer ${env.CRON_SECRET}`) {

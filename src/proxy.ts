@@ -1,9 +1,9 @@
 import { betterFetch } from '@better-fetch/fetch';
-import { MiddlewareConfig, NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, ProxyConfig } from 'next/server';
 
 import { Session } from '~/lib/auth';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(
     '/api/auth/get-session',
     {
@@ -24,6 +24,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config: MiddlewareConfig = {
+export const config: ProxyConfig = {
   matcher: ['/files/:path*'],
 };

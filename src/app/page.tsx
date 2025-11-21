@@ -43,7 +43,7 @@ function OngoingIcon() {
 
 export default async function Page() {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
 
   return (

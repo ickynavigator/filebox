@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint --cache",
     "typecheck": "tsc --noEmit",
+    "typegen": "next typegen",
     "db:generate": "bun run --bun drizzle-kit generate",
     "db:migrate": "bun run --bun drizzle-kit migrate",
     "db:studio": "bun run --bun drizzle-kit studio",
@@ -37,22 +38,22 @@
     "drizzle-orm": "^0.44.7",
     "drizzle-zod": "^0.8.3",
     "jiti": "^2.6.1",
-    "next": "14.2.1",
+    "next": "16.0.3",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "react-dropzone": "^14.3.8",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
-    "@next/eslint-plugin-next": "^16.0.3",
+    "@next/eslint-plugin-next": "16.0.3",
     "@types/node": "24.10.1",
-    "@types/react": "18.2.77",
-    "@types/react-dom": "18.2.25",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
     "drizzle-kit": "^0.31.7",
@@ -68,5 +69,9 @@
     "prettier": "^3.6.2",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.47.0"
+  },
+  "overrides": {
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3"
   }
 }

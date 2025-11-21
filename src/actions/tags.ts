@@ -37,7 +37,7 @@ export async function createBatchTags(names: Tag['name'][]) {
       .returning();
   });
 
-  revalidateTag(TAGS.TAGS);
+  revalidateTag(TAGS.TAGS, {});
 
   return res;
 }

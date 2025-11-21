@@ -99,7 +99,7 @@ export async function createFile(
     return created;
   });
 
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 
   return res;
 }
@@ -115,5 +115,5 @@ export async function deleteFile(id: IFile['id']) {
 
   await db.delete(schema.ifile).where(eq(schema.ifile.id, id));
 
-  revalidateTag(TAGS.FILES);
+  revalidateTag(TAGS.FILES, {});
 }

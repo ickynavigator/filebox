@@ -6,7 +6,7 @@ import { auth } from '~/lib/auth';
 
 export const SignoutButton = async () => {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
 
   return <Suspense>{session?.user ? <InnerSignoutButton /> : null}</Suspense>;
